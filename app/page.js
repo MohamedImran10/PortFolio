@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect, useRef } from 'react'
 import { motion, useScroll, useTransform } from 'framer-motion'
-import { Code, Terminal, Palette, Zap, Github, ExternalLink, Mail, Download } from 'lucide-react'
+import { Code, Terminal, Palette, Zap, Github, ExternalLink, Mail, Download, Sun, Moon } from 'lucide-react'
 
 const CodeRain = () => {
   const canvasRef = useRef(null)
@@ -347,6 +347,7 @@ export default function Portfolio() {
   const { scrollYProgress } = useScroll()
   const backgroundY = useTransform(scrollYProgress, [0, 1], ['0%', '100%'])
   const [currentSection, setCurrentSection] = useState(0)
+  const [isDarkMode, setIsDarkMode] = useState(true)
 
   const projects = [
     {
@@ -383,7 +384,7 @@ export default function Portfolio() {
 
   useEffect(() => {
     const handleScroll = () => {
-      const sections = ['home', 'projects', 'skills', 'contact']
+      const sections = ['home', 'about', 'projects', 'skills', 'contact']
       const scrollPosition = window.scrollY + window.innerHeight / 2
       
       let activeSection = 0
@@ -410,13 +411,21 @@ export default function Portfolio() {
   }, [])
 
   return (
-    <div className="min-h-screen bg-black text-white overflow-x-hidden">
+    <div className={`min-h-screen overflow-x-hidden transition-colors duration-500 ${
+      isDarkMode 
+        ? 'bg-black text-white' 
+        : 'bg-gradient-to-br from-gray-50 to-blue-50 text-gray-900'
+    }`}>
       {/* Background Effects */}
       <div className="fixed inset-0 z-0">
-        <CodeRain />
-        <ParticleField />
+        {isDarkMode && <CodeRain />}
+        {isDarkMode && <ParticleField />}
         <motion.div
-          className="absolute inset-0 bg-gradient-to-br from-cyan-900/20 via-black to-purple-900/20"
+          className={`absolute inset-0 ${
+            isDarkMode 
+              ? 'bg-gradient-to-br from-cyan-900/20 via-black to-purple-900/20'
+              : 'bg-gradient-to-br from-blue-100/50 via-white to-purple-100/50'
+          }`}
           style={{ y: backgroundY }}
         />
       </div>
@@ -425,20 +434,28 @@ export default function Portfolio() {
       <motion.nav
         initial={{ opacity: 0, y: -50 }}
         animate={{ opacity: 1, y: 0 }}
-        className="fixed top-0 left-0 right-0 z-50 bg-black/20 backdrop-blur-md border-b border-cyan-500/20"
+        className={`fixed top-0 left-0 right-0 z-50 backdrop-blur-md border-b transition-colors duration-500 ${
+          isDarkMode 
+            ? 'bg-black/20 border-cyan-500/20' 
+            : 'bg-white/70 border-gray-200'
+        }`}
       >
         <div className="max-w-7xl mx-auto px-6 py-4 flex justify-between items-center">
-          <GlitchText className="text-2xl font-bold text-cyan-400">
+          <GlitchText className={`text-2xl font-bold ${
+            isDarkMode ? 'text-cyan-400' : 'text-blue-600'
+          }`}>
             &lt;DEV/&gt;
           </GlitchText>
           
           <div className="hidden md:flex space-x-8">
-            {['Home', 'Projects', 'Skills', 'Contact'].map((item, index) => (
+            {['Home', 'About', 'Projects', 'Skills', 'Contact'].map((item, index) => (
               <motion.a
                 key={item}
                 href={`#${item.toLowerCase()}`}
-                className={`text-sm font-medium transition-colors hover:text-cyan-400 ${
-                  currentSection === index ? 'text-cyan-400' : 'text-gray-300'
+                className={`text-sm font-medium transition-colors ${
+                  currentSection === index 
+                    ? (isDarkMode ? 'text-cyan-400' : 'text-blue-600')
+                    : (isDarkMode ? 'text-gray-300 hover:text-cyan-400' : 'text-gray-600 hover:text-blue-600')
                 }`}
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
@@ -455,13 +472,45 @@ export default function Portfolio() {
             ))}
           </div>
 
-          <motion.button
-            whileHover={{ scale: 1.05 }}
-            whileTap={{ scale: 0.95 }}
-            className="bg-gradient-to-r from-cyan-500 to-purple-500 px-4 py-2 rounded-lg text-sm font-medium"
-          >
-            Download CV
-          </motion.button>
+          <div className="flex items-center gap-4">
+            {/* Theme Toggle Button */}
+            <motion.button
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
+              onClick={() => setIsDarkMode(!isDarkMode)}
+              className={`relative w-14 h-8 rounded-full transition-colors duration-300 ${
+                isDarkMode ? 'bg-cyan-500/20' : 'bg-blue-500/20'
+              } border ${
+                isDarkMode ? 'border-cyan-500/30' : 'border-blue-500/30'
+              }`}
+            >
+              <motion.div
+                animate={{ x: isDarkMode ? 24 : 2 }}
+                transition={{ type: "spring", stiffness: 500, damping: 30 }}
+                className={`absolute top-1 w-6 h-6 rounded-full flex items-center justify-center ${
+                  isDarkMode ? 'bg-cyan-400' : 'bg-blue-600'
+                }`}
+              >
+                {isDarkMode ? (
+                  <Moon size={14} className="text-black" />
+                ) : (
+                  <Sun size={14} className="text-white" />
+                )}
+              </motion.div>
+            </motion.button>
+
+            <motion.button
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
+              className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors duration-500 ${
+                isDarkMode 
+                  ? 'bg-gradient-to-r from-cyan-500 to-purple-500 text-white'
+                  : 'bg-gradient-to-r from-blue-500 to-purple-500 text-white'
+              }`}
+            >
+              Download CV
+            </motion.button>
+          </div>
         </div>
       </motion.nav>
 
@@ -488,7 +537,11 @@ export default function Portfolio() {
             transition={{ duration: 1 }}
             className="mb-8"
           >
-            <GlitchText className="text-4xl md:text-6xl font-bold mb-4 bg-gradient-to-r from-cyan-400 via-purple-400 to-cyan-400 bg-clip-text text-transparent">
+            <GlitchText className={`text-4xl md:text-6xl font-bold mb-4 bg-gradient-to-r ${
+              isDarkMode 
+                ? 'from-cyan-400 via-purple-400 to-cyan-400' 
+                : 'from-blue-600 via-purple-600 to-blue-600'
+            } bg-clip-text text-transparent`}>
               MOHAMED IMRAN
             </GlitchText>
             
@@ -496,9 +549,11 @@ export default function Portfolio() {
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               transition={{ delay: 0.5, duration: 1 }}
-              className="text-xl md:text-2xl text-gray-300 mb-6"
+              className={`text-xl md:text-2xl mb-6 ${
+                isDarkMode ? 'text-gray-300' : 'text-gray-700'
+              }`}
             >
-              <span className="text-cyan-400">Full Stack Web Developer</span> · <span className="text-purple-400">Gen AI Enthusiast</span> · <span className="text-green-400">Lifelong Learner</span>
+              <span className={isDarkMode ? 'text-cyan-400' : 'text-blue-600'}>Full Stack Web Developer</span> · <span className={isDarkMode ? 'text-purple-400' : 'text-purple-600'}>Gen AI Enthusiast</span> · <span className={isDarkMode ? 'text-green-400' : 'text-green-600'}>Lifelong Learner</span>
             </motion.div>
           </motion.div>
 
@@ -506,7 +561,9 @@ export default function Portfolio() {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 1, duration: 0.8 }}
-            className="text-lg text-gray-400 mb-8 max-w-2xl mx-auto leading-relaxed"
+            className={`text-lg mb-8 max-w-2xl mx-auto leading-relaxed ${
+              isDarkMode ? 'text-gray-400' : 'text-gray-600'
+            }`}
           >
             Turning ideas into scalable web apps, beautiful interfaces, and intelligent AI-powered experiences.
           </motion.p>
@@ -518,9 +575,18 @@ export default function Portfolio() {
             className="flex flex-col sm:flex-row gap-4 justify-center"
           >
             <motion.button
-              whileHover={{ scale: 1.05, boxShadow: "0 0 25px rgba(0, 255, 255, 0.5)" }}
+              whileHover={{ 
+                scale: 1.05, 
+                boxShadow: isDarkMode 
+                  ? "0 0 25px rgba(0, 255, 255, 0.5)" 
+                  : "0 0 25px rgba(59, 130, 246, 0.5)"
+              }}
               whileTap={{ scale: 0.95 }}
-              className="bg-gradient-to-r from-cyan-500 to-purple-500 px-8 py-3 rounded-lg font-medium flex items-center gap-2 justify-center"
+              className={`px-8 py-3 rounded-lg font-medium flex items-center gap-2 justify-center transition-colors duration-500 ${
+                isDarkMode 
+                  ? 'bg-gradient-to-r from-cyan-500 to-purple-500 text-white'
+                  : 'bg-gradient-to-r from-blue-500 to-purple-500 text-white'
+              }`}
             >
               <Zap size={20} />
               View Projects
@@ -529,7 +595,11 @@ export default function Portfolio() {
             <motion.button
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
-              className="border border-cyan-500/50 px-8 py-3 rounded-lg font-medium hover:bg-cyan-500/10 transition-colors flex items-center gap-2 justify-center"
+              className={`border px-8 py-3 rounded-lg font-medium transition-colors duration-500 flex items-center gap-2 justify-center ${
+                isDarkMode 
+                  ? 'border-cyan-500/50 hover:bg-cyan-500/10 text-white'
+                  : 'border-blue-500/50 hover:bg-blue-500/10 text-gray-900'
+              }`}
             >
               <Mail size={20} />
               Get In Touch
@@ -547,15 +617,150 @@ export default function Portfolio() {
           <motion.div
             animate={{ y: [0, 10, 0] }}
             transition={{ duration: 2, repeat: Infinity }}
-            className="w-6 h-10 border-2 border-cyan-400 rounded-full flex justify-center"
+            className={`w-6 h-10 border-2 rounded-full flex justify-center transition-colors duration-500 ${
+              isDarkMode ? 'border-cyan-400' : 'border-blue-500'
+            }`}
           >
             <motion.div
               animate={{ y: [0, 12, 0] }}
               transition={{ duration: 2, repeat: Infinity }}
-              className="w-1 h-3 bg-cyan-400 rounded-full mt-2"
+              className={`w-1 h-3 rounded-full mt-2 transition-colors duration-500 ${
+                isDarkMode ? 'bg-cyan-400' : 'bg-blue-500'
+              }`}
             />
           </motion.div>
         </motion.div>
+      </section>
+
+      {/* About Section */}
+      <section id="about" className="relative py-20">
+        <div className="relative z-10 max-w-6xl mx-auto px-6">
+          <motion.div
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8 }}
+            className="text-center mb-16"
+          >
+            <GlitchText className="text-4xl md:text-5xl font-bold mb-4 text-purple-400">
+              About Me
+            </GlitchText>
+            <p className="text-gray-400 text-lg max-w-2xl mx-auto">
+              Passionate about creating digital solutions that make a difference
+            </p>
+          </motion.div>
+
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+            {/* Left Column - Profile */}
+            <motion.div
+              initial={{ opacity: 0, x: -50 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              transition={{ duration: 0.8 }}
+              className="space-y-6"
+            >
+              <div className="bg-black/40 backdrop-blur-sm border border-cyan-500/20 rounded-xl p-8">
+                <h3 className="text-2xl font-bold text-cyan-400 mb-4">Who I Am</h3>
+                <p className="text-gray-300 leading-relaxed mb-4">
+                  I'm Mohamed Imran, a passionate Full Stack Web Developer with a deep fascination for 
+                  artificial intelligence and machine learning. My journey in technology started with 
+                  curiosity and has evolved into a commitment to creating innovative solutions that 
+                  bridge the gap between complex technology and user-friendly experiences.
+                </p>
+                <p className="text-gray-300 leading-relaxed">
+                  As a lifelong learner, I constantly explore emerging technologies, from modern web 
+                  frameworks to cutting-edge AI models, always seeking to expand my knowledge and 
+                  apply it to real-world challenges.
+                </p>
+              </div>
+            </motion.div>
+
+            {/* Right Column - Stats & Highlights */}
+            <motion.div
+              initial={{ opacity: 0, x: 50 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              transition={{ duration: 0.8, delay: 0.2 }}
+              className="space-y-6"
+            >
+              <div className="grid grid-cols-2 gap-4">
+                <motion.div
+                  whileHover={{ scale: 1.05 }}
+                  className="bg-black/40 backdrop-blur-sm border border-cyan-500/20 rounded-xl p-6 text-center"
+                >
+                  <div className="text-3xl font-bold text-cyan-400 mb-2">3+</div>
+                  <div className="text-gray-300 text-sm">Years of Experience</div>
+                </motion.div>
+                
+                <motion.div
+                  whileHover={{ scale: 1.05 }}
+                  className="bg-black/40 backdrop-blur-sm border border-purple-500/20 rounded-xl p-6 text-center"
+                >
+                  <div className="text-3xl font-bold text-purple-400 mb-2">50+</div>
+                  <div className="text-gray-300 text-sm">Projects Completed</div>
+                </motion.div>
+                
+                <motion.div
+                  whileHover={{ scale: 1.05 }}
+                  className="bg-black/40 backdrop-blur-sm border border-green-500/20 rounded-xl p-6 text-center"
+                >
+                  <div className="text-3xl font-bold text-green-400 mb-2">15+</div>
+                  <div className="text-gray-300 text-sm">Technologies Mastered</div>
+                </motion.div>
+                
+                <motion.div
+                  whileHover={{ scale: 1.05 }}
+                  className="bg-black/40 backdrop-blur-sm border border-yellow-500/20 rounded-xl p-6 text-center"
+                >
+                  <div className="text-3xl font-bold text-yellow-400 mb-2">24/7</div>
+                  <div className="text-gray-300 text-sm">Learning Mode</div>
+                </motion.div>
+              </div>
+
+              <motion.div
+                whileHover={{ scale: 1.02 }}
+                className="bg-black/40 backdrop-blur-sm border border-cyan-500/20 rounded-xl p-6"
+              >
+                <h4 className="text-xl font-bold text-cyan-400 mb-4">What Drives Me</h4>
+                <ul className="space-y-3 text-gray-300">
+                  <motion.li
+                    initial={{ opacity: 0, x: -20 }}
+                    whileInView={{ opacity: 1, x: 0 }}
+                    transition={{ delay: 0.1 }}
+                    className="flex items-center gap-3"
+                  >
+                    <div className="w-2 h-2 bg-cyan-400 rounded-full"></div>
+                    Building scalable, efficient web applications
+                  </motion.li>
+                  <motion.li
+                    initial={{ opacity: 0, x: -20 }}
+                    whileInView={{ opacity: 1, x: 0 }}
+                    transition={{ delay: 0.2 }}
+                    className="flex items-center gap-3"
+                  >
+                    <div className="w-2 h-2 bg-purple-400 rounded-full"></div>
+                    Exploring AI and machine learning possibilities
+                  </motion.li>
+                  <motion.li
+                    initial={{ opacity: 0, x: -20 }}
+                    whileInView={{ opacity: 1, x: 0 }}
+                    transition={{ delay: 0.3 }}
+                    className="flex items-center gap-3"
+                  >
+                    <div className="w-2 h-2 bg-green-400 rounded-full"></div>
+                    Creating intuitive user experiences
+                  </motion.li>
+                  <motion.li
+                    initial={{ opacity: 0, x: -20 }}
+                    whileInView={{ opacity: 1, x: 0 }}
+                    transition={{ delay: 0.4 }}
+                    className="flex items-center gap-3"
+                  >
+                    <div className="w-2 h-2 bg-yellow-400 rounded-full"></div>
+                    Continuous learning and innovation
+                  </motion.li>
+                </ul>
+              </motion.div>
+            </motion.div>
+          </div>
+        </div>
       </section>
 
       {/* Projects Section */}
