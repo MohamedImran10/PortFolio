@@ -1,8 +1,8 @@
 'use client'
 
 import React, { useState, useEffect, useRef } from 'react'
-import { motion, useScroll, useTransform } from 'framer-motion'
-import { Code, Terminal, Palette, Zap, Github, ExternalLink, Mail, Download, Sun, Moon } from 'lucide-react'
+import { motion, useScroll, useTransform, AnimatePresence } from 'framer-motion'
+import { Code, Terminal, Palette, Zap, Github, ExternalLink, Mail, Download, Sun, Moon, User, MessageSquare, CheckCircle, Send, ArrowRight, Linkedin } from 'lucide-react'
 
 const CodeRain = () => {
   const canvasRef = useRef(null)
@@ -389,6 +389,171 @@ const SkillOrb = ({ skill, index, isDarkMode }) => {
   )
 }
 
+const ContactForm = ({ isDarkMode }) => {
+  const [formData, setFormData] = useState({ name: '', email: '', message: '' })
+  const [isSubmitting, setIsSubmitting] = useState(false)
+  const [isSubmitted, setIsSubmitted] = useState(false)
+
+  const handleSubmit = async (e) => {
+    e.preventDefault()
+    setIsSubmitting(true)
+    
+    // Simulate form submission
+    await new Promise(resolve => setTimeout(resolve, 2000))
+    
+    setIsSubmitting(false)
+    setIsSubmitted(true)
+    
+    // Reset form after showing success message
+    setTimeout(() => {
+      setIsSubmitted(false)
+      setFormData({ name: '', email: '', message: '' })
+    }, 3000)
+  }
+
+  const handleChange = (e) => {
+    setFormData(prev => ({
+      ...prev,
+      [e.target.name]: e.target.value
+    }))
+  }
+
+  if (isSubmitted) {
+    return (
+      <motion.div
+        initial={{ opacity: 0, scale: 0.8 }}
+        animate={{ opacity: 1, scale: 1 }}
+        className="text-center py-12"
+      >
+        <motion.div
+          initial={{ scale: 0 }}
+          animate={{ scale: 1 }}
+          transition={{ delay: 0.2, type: "spring", stiffness: 200 }}
+          className="w-20 h-20 mx-auto mb-6 bg-gradient-to-r from-green-500 to-cyan-500 rounded-full flex items-center justify-center"
+        >
+          <CheckCircle size={40} className="text-white" />
+        </motion.div>
+        <motion.h3
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.4 }}
+          className={`text-2xl font-bold mb-4 ${
+            isDarkMode ? 'text-white' : 'text-gray-900'
+          }`}
+        >
+          Message Sent Successfully!
+        </motion.h3>
+        <motion.p
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.6 }}
+          className={isDarkMode ? 'text-gray-300' : 'text-gray-600'}
+        >
+          Thanks for reaching out! I'll get back to you soon.
+        </motion.p>
+      </motion.div>
+    )
+  }
+
+  return (
+    <form onSubmit={handleSubmit} className="space-y-6">
+      <div>
+        <label className={`block text-sm font-medium mb-2 ${
+          isDarkMode ? 'text-gray-300' : 'text-gray-700'
+        }`}>
+          Name
+        </label>
+        <motion.input
+          whileFocus={{ scale: 1.02 }}
+          type="text"
+          name="name"
+          value={formData.name}
+          onChange={handleChange}
+          required
+          className={`w-full px-4 py-3 rounded-xl border transition-all focus:outline-none focus:ring-2 ${
+            isDarkMode 
+              ? 'bg-gray-800/50 border-gray-600 text-white focus:ring-green-500/50 focus:border-green-500'
+              : 'bg-gray-50/50 border-gray-300 text-gray-900 focus:ring-green-500/50 focus:border-green-500'
+          }`}
+          placeholder="Your name"
+        />
+      </div>
+
+      <div>
+        <label className={`block text-sm font-medium mb-2 ${
+          isDarkMode ? 'text-gray-300' : 'text-gray-700'
+        }`}>
+          Email
+        </label>
+        <motion.input
+          whileFocus={{ scale: 1.02 }}
+          type="email"
+          name="email"
+          value={formData.email}
+          onChange={handleChange}
+          required
+          className={`w-full px-4 py-3 rounded-xl border transition-all focus:outline-none focus:ring-2 ${
+            isDarkMode 
+              ? 'bg-gray-800/50 border-gray-600 text-white focus:ring-green-500/50 focus:border-green-500'
+              : 'bg-gray-50/50 border-gray-300 text-gray-900 focus:ring-green-500/50 focus:border-green-500'
+          }`}
+          placeholder="your.email@example.com"
+        />
+      </div>
+
+      <div>
+        <label className={`block text-sm font-medium mb-2 ${
+          isDarkMode ? 'text-gray-300' : 'text-gray-700'
+        }`}>
+          Message
+        </label>
+        <motion.textarea
+          whileFocus={{ scale: 1.02 }}
+          name="message"
+          value={formData.message}
+          onChange={handleChange}
+          required
+          rows={5}
+          className={`w-full px-4 py-3 rounded-xl border transition-all focus:outline-none focus:ring-2 resize-none ${
+            isDarkMode 
+              ? 'bg-gray-800/50 border-gray-600 text-white focus:ring-green-500/50 focus:border-green-500'
+              : 'bg-gray-50/50 border-gray-300 text-gray-900 focus:ring-green-500/50 focus:border-green-500'
+          }`}
+          placeholder="Tell me about your project or just say hello!"
+        />
+      </div>
+
+      <motion.button
+        type="submit"
+        disabled={isSubmitting}
+        whileHover={{ scale: isSubmitting ? 1 : 1.02 }}
+        whileTap={{ scale: isSubmitting ? 1 : 0.98 }}
+        className={`w-full py-4 rounded-xl font-medium text-white transition-all flex items-center justify-center gap-2 ${
+          isSubmitting 
+            ? 'bg-gray-500 cursor-not-allowed' 
+            : 'bg-gradient-to-r from-green-500 to-cyan-500 hover:shadow-lg hover:shadow-green-500/25'
+        }`}
+      >
+        {isSubmitting ? (
+          <>
+            <motion.div
+              animate={{ rotate: 360 }}
+              transition={{ duration: 1, repeat: Infinity, ease: "linear" }}
+              className="w-5 h-5 border-2 border-white border-t-transparent rounded-full"
+            />
+            Sending...
+          </>
+        ) : (
+          <>
+            <Send size={20} />
+            Send Message
+          </>
+        )}
+      </motion.button>
+    </form>
+  )
+}
+
 export default function Portfolio() {
   const { scrollYProgress } = useScroll()
   const backgroundY = useTransform(scrollYProgress, [0, 1], ['0%', '100%'])
@@ -463,16 +628,22 @@ export default function Portfolio() {
         : 'bg-gradient-to-br from-gray-50 to-blue-50 text-gray-900'
     }`}>
       {/* Background Effects */}
-      <div className="fixed inset-0 z-0">
+      <div className="fixed inset-0 z-0" style={{ width: '100%', height: '100%', top: 0, left: 0 }}>
         {isDarkMode && <CodeRain />}
         {isDarkMode && <ParticleField />}
         <motion.div
-          className={`absolute inset-0 ${
+          className={`absolute inset-0 w-full ${
             isDarkMode 
               ? 'bg-gradient-to-br from-cyan-900/20 via-black to-purple-900/20'
               : 'bg-gradient-to-br from-blue-100/50 via-white to-purple-100/50'
           }`}
-          style={{ y: backgroundY }}
+          style={{ 
+            y: backgroundY, 
+            width: '100vw', 
+            height: '300vh',
+            top: 0,
+            left: 0
+          }}
         />
       </div>
 
@@ -960,40 +1131,145 @@ export default function Portfolio() {
 
       {/* Contact Section */}
       <section id="contact" className="relative py-20">
-        <div className="relative z-10 max-w-4xl mx-auto px-6 text-center">
+        <div className="relative z-10 max-w-6xl mx-auto px-6">
           <motion.div
             initial={{ opacity: 0, y: 30 }}
             whileInView={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8 }}
+            className="text-center mb-16"
           >
-            <GlitchText className="text-4xl md:text-5xl font-bold mb-8 text-green-400">
-              Let's Build Something Amazing
+            <GlitchText className="text-4xl md:text-5xl font-bold mb-4 text-green-400">
+              Let's Create Something Amazing
             </GlitchText>
-            
-            <p className="text-gray-400 text-lg mb-12 max-w-2xl mx-auto">
-              Ready to push the boundaries of what's possible? Let's collaborate on your next groundbreaking project.
+            <p className="text-gray-400 text-lg max-w-2xl mx-auto">
+              Ready to bring your ideas to life? Let's collaborate and build something extraordinary together.
             </p>
+          </motion.div>
 
-            <div className="flex flex-col sm:flex-row gap-6 justify-center">
-              <motion.button
-                whileHover={{ scale: 1.05, boxShadow: "0 0 25px rgba(0, 255, 0, 0.5)" }}
-                whileTap={{ scale: 0.95 }}
-                className="bg-gradient-to-r from-green-500 to-cyan-500 px-8 py-4 rounded-lg font-medium flex items-center gap-2 justify-center text-lg"
-              >
-                <Mail size={24} />
-                Start a Conversation
-              </motion.button>
-              
-              <motion.button
+          <div className="grid lg:grid-cols-2 gap-12 items-start">
+            {/* Contact Form */}
+            <motion.div
+              initial={{ opacity: 0, x: -50 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              transition={{ duration: 0.8 }}
+              className="relative"
+            >
+              <div className={`relative backdrop-blur-lg rounded-2xl p-8 border ${
+                isDarkMode 
+                  ? 'bg-gray-900/50 border-gray-700/50' 
+                  : 'bg-white/50 border-gray-300/50'
+              }`}>
+                <ContactForm isDarkMode={isDarkMode} />
+              </div>
+            </motion.div>
+
+            {/* Contact Info */}
+            <motion.div
+              initial={{ opacity: 0, x: 50 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              transition={{ duration: 0.8, delay: 0.2 }}
+              className="space-y-8"
+            >
+              <div>
+                <h3 className={`text-2xl font-bold mb-6 ${
+                  isDarkMode ? 'text-white' : 'text-gray-900'
+                }`}>
+                  Get In Touch
+                </h3>
+                <p className={`text-lg leading-relaxed ${
+                  isDarkMode ? 'text-gray-300' : 'text-gray-600'
+                }`}>
+                  I'm always excited to work on new projects and collaborate with 
+                  passionate people. Whether you have a project in mind or just 
+                  want to chat about technology, feel free to reach out!
+                </p>
+              </div>
+
+              <div className="space-y-6">
+                <motion.a
+                  href="mailto:mohamedimran.dev@gmail.com"
+                  whileHover={{ scale: 1.05 }}
+                  className={`flex items-center gap-4 p-4 rounded-xl border transition-all ${
+                    isDarkMode 
+                      ? 'border-gray-700/50 hover:border-green-500/50 hover:bg-gray-800/50' 
+                      : 'border-gray-300/50 hover:border-green-500/50 hover:bg-gray-50/50'
+                  }`}
+                >
+                  <div className="w-12 h-12 bg-gradient-to-r from-green-500 to-cyan-500 rounded-xl flex items-center justify-center">
+                    <Mail size={24} className="text-white" />
+                  </div>
+                  <div>
+                    <p className={`font-medium ${isDarkMode ? 'text-white' : 'text-gray-900'}`}>
+                      Email Me
+                    </p>
+                    <p className={isDarkMode ? 'text-gray-400' : 'text-gray-600'}>
+                      mohamedimran.dev@gmail.com
+                    </p>
+                  </div>
+                </motion.a>
+
+                <motion.a
+                  href="https://linkedin.com/in/mohamed-imran-m-info"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  whileHover={{ scale: 1.05 }}
+                  className={`flex items-center gap-4 p-4 rounded-xl border transition-all ${
+                    isDarkMode 
+                      ? 'border-gray-700/50 hover:border-blue-500/50 hover:bg-gray-800/50' 
+                      : 'border-gray-300/50 hover:border-blue-500/50 hover:bg-gray-50/50'
+                  }`}
+                >
+                  <div className="w-12 h-12 bg-gradient-to-r from-blue-500 to-blue-600 rounded-xl flex items-center justify-center">
+                    <Linkedin size={24} className="text-white" />
+                  </div>
+                  <div>
+                    <p className={`font-medium ${isDarkMode ? 'text-white' : 'text-gray-900'}`}>
+                      LinkedIn
+                    </p>
+                    <p className={isDarkMode ? 'text-gray-400' : 'text-gray-600'}>
+                      Let's connect professionally
+                    </p>
+                  </div>
+                </motion.a>
+
+                <motion.a
+                  href="https://github.com/MohamedImran10"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  whileHover={{ scale: 1.05 }}
+                  className={`flex items-center gap-4 p-4 rounded-xl border transition-all ${
+                    isDarkMode 
+                      ? 'border-gray-700/50 hover:border-purple-500/50 hover:bg-gray-800/50' 
+                      : 'border-gray-300/50 hover:border-purple-500/50 hover:bg-gray-50/50'
+                  }`}
+                >
+                  <div className="w-12 h-12 bg-gradient-to-r from-purple-500 to-pink-500 rounded-xl flex items-center justify-center">
+                    <Github size={24} className="text-white" />
+                  </div>
+                  <div>
+                    <p className={`font-medium ${isDarkMode ? 'text-white' : 'text-gray-900'}`}>
+                      GitHub
+                    </p>
+                    <p className={isDarkMode ? 'text-gray-400' : 'text-gray-600'}>
+                      Check out my projects
+                    </p>
+                  </div>
+                </motion.a>
+              </div>
+
+              <motion.div
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
-                className="border border-green-500/50 px-8 py-4 rounded-lg font-medium hover:bg-green-500/10 transition-colors flex items-center gap-2 justify-center text-lg"
+                className="mt-8"
               >
-                <Download size={24} />
-                Download Resume
-              </motion.button>
-            </div>
-          </motion.div>
+                <button className="w-full bg-gradient-to-r from-green-500 to-cyan-500 px-8 py-4 rounded-xl font-medium flex items-center gap-2 justify-center text-lg text-white hover:shadow-lg hover:shadow-green-500/25 transition-all">
+                  <Download size={24} />
+                  Download Resume
+                  <ArrowRight size={20} />
+                </button>
+              </motion.div>
+            </motion.div>
+          </div>
         </div>
       </section>
 
