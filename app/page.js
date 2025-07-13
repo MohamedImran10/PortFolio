@@ -398,17 +398,38 @@ const ContactForm = ({ isDarkMode }) => {
     e.preventDefault()
     setIsSubmitting(true)
     
-    // Simulate form submission
-    await new Promise(resolve => setTimeout(resolve, 2000))
-    
-    setIsSubmitting(false)
-    setIsSubmitted(true)
-    
-    // Reset form after showing success message
-    setTimeout(() => {
-      setIsSubmitted(false)
-      setFormData({ name: '', email: '', message: '' })
-    }, 3000)
+    try {
+      // Send email using our API route
+      const response = await fetch('/api/contact', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          name: formData.name,
+          email: formData.email,
+          message: formData.message
+        }),
+      })
+      
+      if (response.ok) {
+        setIsSubmitting(false)
+        setIsSubmitted(true)
+        
+        // Reset form after showing success message
+        setTimeout(() => {
+          setIsSubmitted(false)
+          setFormData({ name: '', email: '', message: '' })
+        }, 3000)
+      } else {
+        throw new Error('Failed to send message')
+      }
+    } catch (error) {
+      console.error('Error sending message:', error)
+      setIsSubmitting(false)
+      // You could add error handling here
+      alert('Failed to send message. Please try again or contact me directly at mohamedimranworkmailspace@gmail.com')
+    }
   }
 
   const handleChange = (e) => {
@@ -1187,7 +1208,7 @@ export default function Portfolio() {
 
               <div className="space-y-6">
                 <motion.a
-                  href="mailto:mohamedimran.dev@gmail.com"
+                  href="mailto:mohamedimranworkmailspace@gmail.com"
                   whileHover={{ scale: 1.05 }}
                   className={`flex items-center gap-4 p-4 rounded-xl border transition-all ${
                     isDarkMode 
@@ -1203,7 +1224,7 @@ export default function Portfolio() {
                       Email Me
                     </p>
                     <p className={isDarkMode ? 'text-gray-400' : 'text-gray-600'}>
-                      mohamedimran.dev@gmail.com
+                      mohamedimranworkmailspace@gmail.com
                     </p>
                   </div>
                 </motion.a>
