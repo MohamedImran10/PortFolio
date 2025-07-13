@@ -383,13 +383,29 @@ export default function Portfolio() {
 
   useEffect(() => {
     const handleScroll = () => {
-      const scrollPosition = window.scrollY
-      const windowHeight = window.innerHeight
-      const section = Math.floor(scrollPosition / windowHeight)
-      setCurrentSection(section)
+      const sections = ['home', 'projects', 'skills', 'contact']
+      const scrollPosition = window.scrollY + window.innerHeight / 2
+      
+      let activeSection = 0
+      
+      sections.forEach((sectionId, index) => {
+        const element = document.getElementById(sectionId)
+        if (element) {
+          const rect = element.getBoundingClientRect()
+          const elementTop = rect.top + window.scrollY
+          const elementBottom = elementTop + rect.height
+          
+          if (scrollPosition >= elementTop && scrollPosition <= elementBottom) {
+            activeSection = index
+          }
+        }
+      })
+      
+      setCurrentSection(activeSection)
     }
 
     window.addEventListener('scroll', handleScroll)
+    handleScroll() // Call once on mount
     return () => window.removeEventListener('scroll', handleScroll)
   }, [])
 
@@ -426,6 +442,13 @@ export default function Portfolio() {
                 }`}
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
+                onClick={(e) => {
+                  e.preventDefault()
+                  setCurrentSection(index)
+                  document.getElementById(item.toLowerCase())?.scrollIntoView({
+                    behavior: 'smooth'
+                  })
+                }}
               >
                 {item}
               </motion.a>
@@ -465,8 +488,8 @@ export default function Portfolio() {
             transition={{ duration: 1 }}
             className="mb-8"
           >
-            <GlitchText className="text-6xl md:text-8xl font-bold mb-4 bg-gradient-to-r from-cyan-400 via-purple-400 to-cyan-400 bg-clip-text text-transparent">
-              ALEX CHEN
+            <GlitchText className="text-4xl md:text-6xl font-bold mb-4 bg-gradient-to-r from-cyan-400 via-purple-400 to-cyan-400 bg-clip-text text-transparent">
+              MOHAMED IMRAN
             </GlitchText>
             
             <motion.div
@@ -475,7 +498,7 @@ export default function Portfolio() {
               transition={{ delay: 0.5, duration: 1 }}
               className="text-xl md:text-2xl text-gray-300 mb-6"
             >
-              <span className="text-cyan-400">Full-Stack Developer</span> × <span className="text-purple-400">AI Engineer</span> × <span className="text-green-400">Creative Technologist</span>
+              <span className="text-cyan-400">Full Stack Web Developer</span> · <span className="text-purple-400">Gen AI Enthusiast</span> · <span className="text-green-400">Lifelong Learner</span>
             </motion.div>
           </motion.div>
 
@@ -485,8 +508,7 @@ export default function Portfolio() {
             transition={{ delay: 1, duration: 0.8 }}
             className="text-lg text-gray-400 mb-8 max-w-2xl mx-auto leading-relaxed"
           >
-            Crafting digital experiences that blur the line between technology and art. 
-            Specializing in neural networks, quantum computing, and immersive web technologies.
+            Turning ideas into scalable web apps, beautiful interfaces, and intelligent AI-powered experiences.
           </motion.p>
 
           <motion.div
@@ -629,7 +651,7 @@ export default function Portfolio() {
       <footer className="relative border-t border-cyan-500/20 py-8">
         <div className="relative z-10 max-w-7xl mx-auto px-6 text-center">
           <p className="text-gray-500">
-            © 2024 Alex Chen. Crafted with passion and cutting-edge technology.
+            © 2024 Mohamed Imran. Crafted with passion and cutting-edge technology.
           </p>
         </div>
       </footer>

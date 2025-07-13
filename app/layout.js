@@ -1,8 +1,8 @@
 import './globals.css'
 
 export const metadata = {
-  title: 'Alex Chen - Portfolio',
-  description: 'Full-Stack Developer × AI Engineer × Creative Technologist',
+  title: 'Mohamed Imran - Portfolio',
+  description: 'Full Stack Web Developer · Gen AI Enthusiast · Lifelong Learner',
 }
 
 export default function RootLayout({ children }) {
