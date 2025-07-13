@@ -226,14 +226,15 @@ const GlitchText = ({ children, className = '' }) => {
   )
 }
 
-const FloatingIcon = ({ icon: Icon, delay = 0 }) => {
+const FloatingIcon = ({ icon: Icon, delay = 0, isDarkMode }) => {
   return (
     <motion.div
       initial={{ opacity: 0, y: 20 }}
       animate={{ 
-        opacity: [0.3, 0.8, 0.3],
-        y: [0, -10, 0],
-        rotate: [0, 5, -5, 0]
+        opacity: [0.4, 1, 0.4],
+        y: [0, -15, 0],
+        rotate: [0, 10, -10, 0],
+        scale: [1, 1.2, 1]
       }}
       transition={{
         duration: 4,
@@ -241,14 +242,20 @@ const FloatingIcon = ({ icon: Icon, delay = 0 }) => {
         repeat: Infinity,
         ease: "easeInOut"
       }}
-      className="absolute text-cyan-400"
+      className="absolute"
     >
-      <Icon size={24} />
+      <div className={`p-3 rounded-full backdrop-blur-sm border transition-colors duration-500 ${
+        isDarkMode 
+          ? 'text-cyan-400 bg-cyan-500/10 border-cyan-500/30 shadow-lg shadow-cyan-500/20'
+          : 'text-blue-600 bg-blue-500/10 border-blue-500/30 shadow-lg shadow-blue-500/20'
+      }`}>
+        <Icon size={28} />
+      </div>
     </motion.div>
   )
 }
 
-const ProjectCard = ({ project, index }) => {
+const ProjectCard = ({ project, index, isDarkMode }) => {
   const [isHovered, setIsHovered] = useState(false)
 
   return (
@@ -261,31 +268,51 @@ const ProjectCard = ({ project, index }) => {
       onHoverEnd={() => setIsHovered(false)}
       className="relative group"
     >
-      <div className="bg-black/40 backdrop-blur-sm border border-cyan-500/20 rounded-xl p-6 h-full overflow-hidden">
-        <div className="absolute inset-0 bg-gradient-to-br from-cyan-500/5 to-purple-500/5 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+      <div className={`backdrop-blur-sm border rounded-xl p-6 h-full overflow-hidden transition-all duration-500 ${
+        isDarkMode 
+          ? 'bg-black/40 border-cyan-500/20 shadow-lg shadow-cyan-500/10'
+          : 'bg-white/70 border-blue-500/20 shadow-lg shadow-blue-500/10'
+      }`}>
+        <div className={`absolute inset-0 bg-gradient-to-br opacity-0 group-hover:opacity-100 transition-opacity duration-300 ${
+          isDarkMode 
+            ? 'from-cyan-500/5 to-purple-500/5'
+            : 'from-blue-500/5 to-purple-500/5'
+        }`} />
         
         <div className="relative z-10">
           <div className="flex items-center justify-between mb-4">
-            <h3 className="text-xl font-bold text-white">{project.title}</h3>
+            <h3 className={`text-xl font-bold ${
+              isDarkMode ? 'text-white' : 'text-gray-900'
+            }`}>{project.title}</h3>
             <div className="flex gap-2">
               <motion.button
                 whileHover={{ scale: 1.1 }}
                 whileTap={{ scale: 0.9 }}
-                className="p-2 bg-cyan-500/20 rounded-lg hover:bg-cyan-500/30 transition-colors"
+                className={`p-2 rounded-lg transition-colors ${
+                  isDarkMode 
+                    ? 'bg-cyan-500/20 hover:bg-cyan-500/30 text-cyan-400'
+                    : 'bg-blue-500/20 hover:bg-blue-500/30 text-blue-600'
+                }`}
               >
-                <Github size={16} className="text-cyan-400" />
+                <Github size={16} />
               </motion.button>
               <motion.button
                 whileHover={{ scale: 1.1 }}
                 whileTap={{ scale: 0.9 }}
-                className="p-2 bg-cyan-500/20 rounded-lg hover:bg-cyan-500/30 transition-colors"
+                className={`p-2 rounded-lg transition-colors ${
+                  isDarkMode 
+                    ? 'bg-cyan-500/20 hover:bg-cyan-500/30 text-cyan-400'
+                    : 'bg-blue-500/20 hover:bg-blue-500/30 text-blue-600'
+                }`}
               >
-                <ExternalLink size={16} className="text-cyan-400" />
+                <ExternalLink size={16} />
               </motion.button>
             </div>
           </div>
           
-          <p className="text-gray-300 mb-4 text-sm leading-relaxed">{project.description}</p>
+          <p className={`mb-4 text-sm leading-relaxed ${
+            isDarkMode ? 'text-gray-300' : 'text-gray-700'
+          }`}>{project.description}</p>
           
           <div className="flex flex-wrap gap-2">
             {project.tech.map((tech, i) => (
@@ -294,7 +321,11 @@ const ProjectCard = ({ project, index }) => {
                 initial={{ opacity: 0, scale: 0.8 }}
                 animate={{ opacity: 1, scale: 1 }}
                 transition={{ delay: i * 0.1 }}
-                className="px-3 py-1 bg-cyan-500/10 border border-cyan-500/30 rounded-full text-xs text-cyan-300"
+                className={`px-3 py-1 border rounded-full text-xs transition-colors duration-500 ${
+                  isDarkMode 
+                    ? 'bg-cyan-500/10 border-cyan-500/30 text-cyan-300'
+                    : 'bg-blue-500/10 border-blue-500/30 text-blue-700'
+                }`}
               >
                 {tech}
               </motion.span>
@@ -303,7 +334,11 @@ const ProjectCard = ({ project, index }) => {
         </div>
 
         <motion.div
-          className="absolute -bottom-10 -right-10 w-20 h-20 bg-gradient-to-br from-cyan-500/20 to-purple-500/20 rounded-full blur-xl"
+          className={`absolute -bottom-10 -right-10 w-20 h-20 rounded-full blur-xl ${
+            isDarkMode 
+              ? 'bg-gradient-to-br from-cyan-500/20 to-purple-500/20'
+              : 'bg-gradient-to-br from-blue-500/20 to-purple-500/20'
+          }`}
           animate={{
             scale: isHovered ? 1.5 : 1,
             opacity: isHovered ? 0.8 : 0.3
@@ -315,7 +350,7 @@ const ProjectCard = ({ project, index }) => {
   )
 }
 
-const SkillOrb = ({ skill, index }) => {
+const SkillOrb = ({ skill, index, isDarkMode }) => {
   return (
     <motion.div
       initial={{ opacity: 0, scale: 0 }}
@@ -328,15 +363,26 @@ const SkillOrb = ({ skill, index }) => {
       }}
       whileHover={{ 
         scale: 1.1,
-        boxShadow: "0 0 20px rgba(0, 255, 255, 0.5)"
+        boxShadow: isDarkMode 
+          ? "0 10px 30px rgba(0, 255, 255, 0.4)" 
+          : "0 10px 30px rgba(59, 130, 246, 0.4)"
       }}
       className="relative group cursor-pointer"
     >
-      <div className="bg-black/60 backdrop-blur-sm border border-cyan-500/30 rounded-full px-6 py-3 text-center">
-        <span className="text-cyan-300 font-medium text-sm">{skill}</span>
+      <div className={`backdrop-blur-sm border rounded-full px-6 py-3 text-center transition-all duration-500 ${
+        isDarkMode 
+          ? 'bg-black/60 border-cyan-500/30 shadow-lg shadow-cyan-500/20'
+          : 'bg-white/70 border-blue-500/30 shadow-lg shadow-blue-500/20'
+      }`}>
+        <span className={`font-medium text-sm ${
+          isDarkMode ? 'text-cyan-300' : 'text-blue-700'
+        }`}>{skill}</span>
         <motion.div
-          className="absolute inset-0 bg-gradient-to-r from-cyan-500/20 to-purple-500/20 rounded-full opacity-0 group-hover:opacity-100"
-          transition={{ duration: 0.3 }}
+          className={`absolute inset-0 bg-gradient-to-r rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-300 ${
+            isDarkMode 
+              ? 'from-cyan-500/20 to-purple-500/20'
+              : 'from-blue-500/20 to-purple-500/20'
+          }`}
         />
       </div>
     </motion.div>
@@ -405,8 +451,8 @@ export default function Portfolio() {
       setCurrentSection(activeSection)
     }
 
+    // Only add scroll listener, don't call handleScroll immediately
     window.addEventListener('scroll', handleScroll)
-    handleScroll() // Call once on mount
     return () => window.removeEventListener('scroll', handleScroll)
   }, [])
 
@@ -519,16 +565,16 @@ export default function Portfolio() {
         <div className="relative z-10 text-center max-w-4xl mx-auto px-6">
           {/* Floating Icons */}
           <div className="absolute -top-20 -left-20">
-            <FloatingIcon icon={Code} delay={0} />
+            <FloatingIcon icon={Code} delay={0} isDarkMode={isDarkMode} />
           </div>
           <div className="absolute -top-16 -right-16">
-            <FloatingIcon icon={Terminal} delay={1} />
+            <FloatingIcon icon={Terminal} delay={1} isDarkMode={isDarkMode} />
           </div>
           <div className="absolute -bottom-20 -left-16">
-            <FloatingIcon icon={Palette} delay={2} />
+            <FloatingIcon icon={Palette} delay={2} isDarkMode={isDarkMode} />
           </div>
           <div className="absolute -bottom-16 -right-20">
-            <FloatingIcon icon={Zap} delay={3} />
+            <FloatingIcon icon={Zap} delay={3} isDarkMode={isDarkMode} />
           </div>
 
           <motion.div
@@ -657,15 +703,25 @@ export default function Portfolio() {
               transition={{ duration: 0.8 }}
               className="space-y-6"
             >
-              <div className="bg-black/40 backdrop-blur-sm border border-cyan-500/20 rounded-xl p-8">
-                <h3 className="text-2xl font-bold text-cyan-400 mb-4">Who I Am</h3>
-                <p className="text-gray-300 leading-relaxed mb-4">
+              <div className={`backdrop-blur-sm border rounded-xl p-8 transition-all duration-500 ${
+                isDarkMode 
+                  ? 'bg-black/40 border-cyan-500/20 shadow-lg shadow-cyan-500/10'
+                  : 'bg-white/70 border-blue-500/20 shadow-lg shadow-blue-500/10'
+              }`}>
+                <h3 className={`text-2xl font-bold mb-4 ${
+                  isDarkMode ? 'text-cyan-400' : 'text-blue-600'
+                }`}>Who I Am</h3>
+                <p className={`leading-relaxed mb-4 ${
+                  isDarkMode ? 'text-gray-300' : 'text-gray-700'
+                }`}>
                   I'm Mohamed Imran, a passionate Full Stack Web Developer with a deep fascination for 
                   artificial intelligence and machine learning. My journey in technology started with 
                   curiosity and has evolved into a commitment to creating innovative solutions that 
                   bridge the gap between complex technology and user-friendly experiences.
                 </p>
-                <p className="text-gray-300 leading-relaxed">
+                <p className={`leading-relaxed ${
+                  isDarkMode ? 'text-gray-300' : 'text-gray-700'
+                }`}>
                   As a lifelong learner, I constantly explore emerging technologies, from modern web 
                   frameworks to cutting-edge AI models, always seeking to expand my knowledge and 
                   apply it to real-world challenges.
@@ -682,51 +738,122 @@ export default function Portfolio() {
             >
               <div className="grid grid-cols-2 gap-4">
                 <motion.div
-                  whileHover={{ scale: 1.05 }}
-                  className="bg-black/40 backdrop-blur-sm border border-cyan-500/20 rounded-xl p-6 text-center"
+                  whileHover={{ 
+                    scale: 1.05,
+                    boxShadow: isDarkMode 
+                      ? "0 10px 30px rgba(0, 255, 255, 0.3)" 
+                      : "0 10px 30px rgba(59, 130, 246, 0.3)"
+                  }}
+                  className={`backdrop-blur-sm border rounded-xl p-6 text-center transition-all duration-500 ${
+                    isDarkMode 
+                      ? 'bg-gradient-to-br from-cyan-500/10 to-blue-500/10 border-cyan-500/30'
+                      : 'bg-gradient-to-br from-blue-500/10 to-cyan-500/10 border-blue-500/30'
+                  }`}
                 >
-                  <div className="text-3xl font-bold text-cyan-400 mb-2">3+</div>
-                  <div className="text-gray-300 text-sm">Years of Experience</div>
+                  <div className={`text-3xl font-bold mb-2 ${
+                    isDarkMode ? 'text-cyan-400' : 'text-blue-600'
+                  }`}>3+</div>
+                  <div className={`text-sm ${
+                    isDarkMode ? 'text-gray-300' : 'text-gray-700'
+                  }`}>Years of Experience</div>
                 </motion.div>
                 
                 <motion.div
-                  whileHover={{ scale: 1.05 }}
-                  className="bg-black/40 backdrop-blur-sm border border-purple-500/20 rounded-xl p-6 text-center"
+                  whileHover={{ 
+                    scale: 1.05,
+                    boxShadow: isDarkMode 
+                      ? "0 10px 30px rgba(168, 85, 247, 0.3)" 
+                      : "0 10px 30px rgba(147, 51, 234, 0.3)"
+                  }}
+                  className={`backdrop-blur-sm border rounded-xl p-6 text-center transition-all duration-500 ${
+                    isDarkMode 
+                      ? 'bg-gradient-to-br from-purple-500/10 to-pink-500/10 border-purple-500/30'
+                      : 'bg-gradient-to-br from-purple-500/10 to-pink-500/10 border-purple-500/30'
+                  }`}
                 >
-                  <div className="text-3xl font-bold text-purple-400 mb-2">50+</div>
-                  <div className="text-gray-300 text-sm">Projects Completed</div>
+                  <div className={`text-3xl font-bold mb-2 ${
+                    isDarkMode ? 'text-purple-400' : 'text-purple-600'
+                  }`}>50+</div>
+                  <div className={`text-sm ${
+                    isDarkMode ? 'text-gray-300' : 'text-gray-700'
+                  }`}>Projects Completed</div>
                 </motion.div>
                 
                 <motion.div
-                  whileHover={{ scale: 1.05 }}
-                  className="bg-black/40 backdrop-blur-sm border border-green-500/20 rounded-xl p-6 text-center"
+                  whileHover={{ 
+                    scale: 1.05,
+                    boxShadow: isDarkMode 
+                      ? "0 10px 30px rgba(34, 197, 94, 0.3)" 
+                      : "0 10px 30px rgba(22, 163, 74, 0.3)"
+                  }}
+                  className={`backdrop-blur-sm border rounded-xl p-6 text-center transition-all duration-500 ${
+                    isDarkMode 
+                      ? 'bg-gradient-to-br from-green-500/10 to-emerald-500/10 border-green-500/30'
+                      : 'bg-gradient-to-br from-green-500/10 to-emerald-500/10 border-green-500/30'
+                  }`}
                 >
-                  <div className="text-3xl font-bold text-green-400 mb-2">15+</div>
-                  <div className="text-gray-300 text-sm">Technologies Mastered</div>
+                  <div className={`text-3xl font-bold mb-2 ${
+                    isDarkMode ? 'text-green-400' : 'text-green-600'
+                  }`}>15+</div>
+                  <div className={`text-sm ${
+                    isDarkMode ? 'text-gray-300' : 'text-gray-700'
+                  }`}>Technologies Mastered</div>
                 </motion.div>
                 
                 <motion.div
-                  whileHover={{ scale: 1.05 }}
-                  className="bg-black/40 backdrop-blur-sm border border-yellow-500/20 rounded-xl p-6 text-center"
+                  whileHover={{ 
+                    scale: 1.05,
+                    boxShadow: isDarkMode 
+                      ? "0 10px 30px rgba(245, 158, 11, 0.3)" 
+                      : "0 10px 30px rgba(217, 119, 6, 0.3)"
+                  }}
+                  className={`backdrop-blur-sm border rounded-xl p-6 text-center transition-all duration-500 ${
+                    isDarkMode 
+                      ? 'bg-gradient-to-br from-yellow-500/10 to-orange-500/10 border-yellow-500/30'
+                      : 'bg-gradient-to-br from-yellow-500/10 to-orange-500/10 border-yellow-500/30'
+                  }`}
                 >
-                  <div className="text-3xl font-bold text-yellow-400 mb-2">24/7</div>
-                  <div className="text-gray-300 text-sm">Learning Mode</div>
+                  <div className={`text-3xl font-bold mb-2 ${
+                    isDarkMode ? 'text-yellow-400' : 'text-yellow-600'
+                  }`}>24/7</div>
+                  <div className={`text-sm ${
+                    isDarkMode ? 'text-gray-300' : 'text-gray-700'
+                  }`}>Learning Mode</div>
                 </motion.div>
               </div>
 
               <motion.div
-                whileHover={{ scale: 1.02 }}
-                className="bg-black/40 backdrop-blur-sm border border-cyan-500/20 rounded-xl p-6"
+                whileHover={{ 
+                  scale: 1.02,
+                  boxShadow: isDarkMode 
+                    ? "0 15px 40px rgba(0, 255, 255, 0.2)" 
+                    : "0 15px 40px rgba(59, 130, 246, 0.2)"
+                }}
+                className={`backdrop-blur-sm border rounded-xl p-6 transition-all duration-500 ${
+                  isDarkMode 
+                    ? 'bg-gradient-to-br from-cyan-500/5 to-purple-500/5 border-cyan-500/20'
+                    : 'bg-gradient-to-br from-blue-500/5 to-purple-500/5 border-blue-500/20'
+                }`}
               >
-                <h4 className="text-xl font-bold text-cyan-400 mb-4">What Drives Me</h4>
-                <ul className="space-y-3 text-gray-300">
+                <h4 className={`text-xl font-bold mb-4 ${
+                  isDarkMode ? 'text-cyan-400' : 'text-blue-600'
+                }`}>What Drives Me</h4>
+                <ul className={`space-y-3 ${
+                  isDarkMode ? 'text-gray-300' : 'text-gray-700'
+                }`}>
                   <motion.li
                     initial={{ opacity: 0, x: -20 }}
                     whileInView={{ opacity: 1, x: 0 }}
                     transition={{ delay: 0.1 }}
                     className="flex items-center gap-3"
                   >
-                    <div className="w-2 h-2 bg-cyan-400 rounded-full"></div>
+                    <motion.div 
+                      animate={{ scale: [1, 1.2, 1] }}
+                      transition={{ duration: 2, repeat: Infinity, delay: 0.1 }}
+                      className={`w-3 h-3 rounded-full ${
+                        isDarkMode ? 'bg-cyan-400' : 'bg-blue-500'
+                      }`}
+                    ></motion.div>
                     Building scalable, efficient web applications
                   </motion.li>
                   <motion.li
@@ -735,7 +862,13 @@ export default function Portfolio() {
                     transition={{ delay: 0.2 }}
                     className="flex items-center gap-3"
                   >
-                    <div className="w-2 h-2 bg-purple-400 rounded-full"></div>
+                    <motion.div 
+                      animate={{ scale: [1, 1.2, 1] }}
+                      transition={{ duration: 2, repeat: Infinity, delay: 0.3 }}
+                      className={`w-3 h-3 rounded-full ${
+                        isDarkMode ? 'bg-purple-400' : 'bg-purple-500'
+                      }`}
+                    ></motion.div>
                     Exploring AI and machine learning possibilities
                   </motion.li>
                   <motion.li
@@ -744,7 +877,13 @@ export default function Portfolio() {
                     transition={{ delay: 0.3 }}
                     className="flex items-center gap-3"
                   >
-                    <div className="w-2 h-2 bg-green-400 rounded-full"></div>
+                    <motion.div 
+                      animate={{ scale: [1, 1.2, 1] }}
+                      transition={{ duration: 2, repeat: Infinity, delay: 0.5 }}
+                      className={`w-3 h-3 rounded-full ${
+                        isDarkMode ? 'bg-green-400' : 'bg-green-500'
+                      }`}
+                    ></motion.div>
                     Creating intuitive user experiences
                   </motion.li>
                   <motion.li
@@ -753,7 +892,13 @@ export default function Portfolio() {
                     transition={{ delay: 0.4 }}
                     className="flex items-center gap-3"
                   >
-                    <div className="w-2 h-2 bg-yellow-400 rounded-full"></div>
+                    <motion.div 
+                      animate={{ scale: [1, 1.2, 1] }}
+                      transition={{ duration: 2, repeat: Infinity, delay: 0.7 }}
+                      className={`w-3 h-3 rounded-full ${
+                        isDarkMode ? 'bg-yellow-400' : 'bg-yellow-500'
+                      }`}
+                    ></motion.div>
                     Continuous learning and innovation
                   </motion.li>
                 </ul>
@@ -782,7 +927,7 @@ export default function Portfolio() {
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             {projects.map((project, index) => (
-              <ProjectCard key={project.id} project={project} index={index} />
+              <ProjectCard key={project.id} project={project} index={index} isDarkMode={isDarkMode} />
             ))}
           </div>
         </div>
@@ -807,7 +952,7 @@ export default function Portfolio() {
 
           <div className="flex flex-wrap justify-center gap-4">
             {skills.map((skill, index) => (
-              <SkillOrb key={skill} skill={skill} index={index} />
+              <SkillOrb key={skill} skill={skill} index={index} isDarkMode={isDarkMode} />
             ))}
           </div>
         </div>
