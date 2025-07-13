@@ -773,7 +773,9 @@ export default function Portfolio() {
               </motion.div>
             </motion.button>
 
-            <motion.button
+            <motion.a
+              href="/Mohamed-Imran-M-Resume.pdf"
+              download="Mohamed-Imran-M-Resume.pdf"
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
               className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors duration-500 ${
@@ -782,8 +784,8 @@ export default function Portfolio() {
                   : 'bg-gradient-to-r from-blue-500 to-purple-500 text-white'
               }`}
             >
-              Download CV
-            </motion.button>
+              Download Resume
+            </motion.a>
           </div>
         </div>
       </motion.nav>
@@ -1323,11 +1325,15 @@ export default function Portfolio() {
                 whileTap={{ scale: 0.95 }}
                 className="mt-8"
               >
-                <button className="w-full bg-gradient-to-r from-green-500 to-cyan-500 px-8 py-4 rounded-xl font-medium flex items-center gap-2 justify-center text-lg text-white hover:shadow-lg hover:shadow-green-500/25 transition-all">
+                <motion.a
+                  href="/Mohamed-Imran-M-Resume.pdf"
+                  download="Mohamed-Imran-M-Resume.pdf"
+                  className="w-full bg-gradient-to-r from-green-500 to-cyan-500 px-8 py-4 rounded-xl font-medium flex items-center gap-2 justify-center text-lg text-white hover:shadow-lg hover:shadow-green-500/25 transition-all"
+                >
                   <Download size={24} />
                   Download Resume
                   <ArrowRight size={20} />
-                </button>
+                </motion.a>
               </motion.div>
             </motion.div>
           </div>
