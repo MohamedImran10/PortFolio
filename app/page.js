@@ -285,7 +285,10 @@ const ProjectCard = ({ project, index, isDarkMode }) => {
               isDarkMode ? 'text-white' : 'text-gray-900'
             }`}>{project.title}</h3>
             <div className="flex gap-2">
-              <motion.button
+              <motion.a
+                href={project.github}
+                target="_blank"
+                rel="noopener noreferrer"
                 whileHover={{ scale: 1.1 }}
                 whileTap={{ scale: 0.9 }}
                 className={`p-2 rounded-lg transition-colors ${
@@ -295,18 +298,38 @@ const ProjectCard = ({ project, index, isDarkMode }) => {
                 }`}
               >
                 <Github size={16} />
-              </motion.button>
-              <motion.button
-                whileHover={{ scale: 1.1 }}
-                whileTap={{ scale: 0.9 }}
-                className={`p-2 rounded-lg transition-colors ${
-                  isDarkMode 
-                    ? 'bg-cyan-500/20 hover:bg-cyan-500/30 text-cyan-400'
-                    : 'bg-blue-500/20 hover:bg-blue-500/30 text-blue-600'
-                }`}
-              >
-                <ExternalLink size={16} />
-              </motion.button>
+              </motion.a>
+              {project.hosted ? (
+                <motion.a
+                  href={project.hosted}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  whileHover={{ scale: 1.1 }}
+                  whileTap={{ scale: 0.9 }}
+                  className={`p-2 rounded-lg transition-colors ${
+                    isDarkMode 
+                      ? 'bg-cyan-500/20 hover:bg-cyan-500/30 text-cyan-400'
+                      : 'bg-blue-500/20 hover:bg-blue-500/30 text-blue-600'
+                  }`}
+                  title="View Live Demo"
+                >
+                  <ExternalLink size={16} />
+                </motion.a>
+              ) : (
+                <motion.button
+                  whileHover={{ scale: 1.1 }}
+                  whileTap={{ scale: 0.9 }}
+                  className={`p-2 rounded-lg transition-colors opacity-50 cursor-not-allowed ${
+                    isDarkMode 
+                      ? 'bg-gray-500/20 text-gray-500'
+                      : 'bg-gray-400/20 text-gray-400'
+                  }`}
+                  title="Demo not available"
+                  disabled
+                >
+                  <ExternalLink size={16} />
+                </motion.button>
+              )}
             </div>
           </div>
           
@@ -584,34 +607,47 @@ export default function Portfolio() {
   const projects = [
     {
       id: '1',
-      title: 'Neural Network Visualizer',
-      description: 'Interactive 3D visualization of neural networks with real-time training data and dynamic node connections.',
-      tech: ['Three.js', 'WebGL', 'TensorFlow.js', 'React'],
+      title: 'Coffee Products Management',
+      description: 'Java-based web application for managing coffee product catalog, including CRUD operations and secure backend integration.',
+      tech: ['JSP', 'Tomcat', 'MariaDB', 'JDBC'],
       color: 'cyan',
-      image: '/api/placeholder/400/300'
+      image: '/api/placeholder/400/300',
+      github: 'https://github.com/MohamedImran10/Coffee_Products_Management',
+      hosted: null // Add your hosted URL here when available
     },
     {
       id: '2',
-      title: 'Quantum Code Editor',
-      description: 'Advanced code editor with quantum computing syntax highlighting and simulation capabilities.',
-      tech: ['Monaco Editor', 'WebAssembly', 'Rust', 'TypeScript'],
+      title: 'CSE Admission Query Chatbot',
+      description: 'Hybrid chatbot combining predefined JSON-based FAQs with AI-powered real-time answers to assist prospective students.',
+      tech: ['Flask', 'Gemini Flash 1.5 API', 'Bootstrap', 'JavaScript'],
       color: 'purple',
-      image: '/api/placeholder/400/300'
+      image: '/api/placeholder/400/300',
+      github: 'https://github.com/MohamedImran10/Cse-Chatbot',
+      hosted: null // Add your hosted URL here when available
     },
     {
       id: '3',
-      title: 'AI-Powered Design System',
-      description: 'Generative design system that creates UI components using machine learning algorithms.',
-      tech: ['Python', 'OpenAI API', 'Figma API', 'Node.js'],
+      title: 'Dynamic Query Interface for Hotel Management',
+      description: 'Backend system enabling dynamic query handling and efficient record management for hotel staff and customer data.',
+      tech: ['Flask', 'MariaDB', 'mysql-connector-python', 'Python'],
       color: 'green',
-      image: '/api/placeholder/400/300'
+      image: '/api/placeholder/400/300',
+      github: 'https://github.com/MohamedImran10/Hotel_Management',
+      hosted: null // Add your hosted URL here when available
     }
   ]
 
   const skills = [
-    'React', 'TypeScript', 'Node.js', 'Python', 'WebGL', 'Three.js',
-    'Machine Learning', 'Blockchain', 'WebAssembly', 'GraphQL',
-    'Docker', 'Kubernetes', 'AWS', 'Neural Networks'
+    // Frontend Technologies
+    'HTML5', 'CSS3', 'JavaScript', 'JSP', 'ReactJS', 'Next.js', 'Bootstrap', 'jQuery',
+    // Backend Technologies
+    'Java', 'Python', 'Django', 'Flask', 'RESTful APIs',
+    // Programming Languages
+    'J2EE', 'C',
+    // Databases
+    'MySQL', 'SQLite', 'SQL', 'MongoDB',
+    // Developer Tools
+    'Git', 'GitHub', 'Eclipse', 'Tomcat', 'VS Code', 'GitHub Copilot'
   ]
 
   useEffect(() => {
@@ -803,7 +839,7 @@ export default function Portfolio() {
               isDarkMode ? 'text-gray-400' : 'text-gray-600'
             }`}
           >
-            Turning ideas into scalable web apps, beautiful interfaces, and intelligent AI-powered experiences.
+            Crafting digital experiences that blend cutting-edge technology with human-centered design. Let's build the future, one line of code at a time.
           </motion.p>
 
           <motion.div
@@ -812,7 +848,8 @@ export default function Portfolio() {
             transition={{ delay: 1.5, duration: 0.8 }}
             className="flex flex-col sm:flex-row gap-4 justify-center"
           >
-            <motion.button
+            <motion.a
+              href="#projects"
               whileHover={{ 
                 scale: 1.05, 
                 boxShadow: isDarkMode 
@@ -828,9 +865,10 @@ export default function Portfolio() {
             >
               <Zap size={20} />
               View Projects
-            </motion.button>
+            </motion.a>
             
-            <motion.button
+            <motion.a
+              href="#contact"
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
               className={`border px-8 py-3 rounded-lg font-medium transition-colors duration-500 flex items-center gap-2 justify-center ${
@@ -841,7 +879,7 @@ export default function Portfolio() {
             >
               <Mail size={20} />
               Get In Touch
-            </motion.button>
+            </motion.a>
           </motion.div>
         </div>
 
@@ -944,7 +982,7 @@ export default function Portfolio() {
                 >
                   <div className={`text-3xl font-bold mb-2 ${
                     isDarkMode ? 'text-cyan-400' : 'text-blue-600'
-                  }`}>3+</div>
+                  }`}>2+</div>
                   <div className={`text-sm ${
                     isDarkMode ? 'text-gray-300' : 'text-gray-700'
                   }`}>Years of Experience</div>
@@ -965,7 +1003,7 @@ export default function Portfolio() {
                 >
                   <div className={`text-3xl font-bold mb-2 ${
                     isDarkMode ? 'text-purple-400' : 'text-purple-600'
-                  }`}>50+</div>
+                  }`}>3</div>
                   <div className={`text-sm ${
                     isDarkMode ? 'text-gray-300' : 'text-gray-700'
                   }`}>Projects Completed</div>
@@ -986,7 +1024,7 @@ export default function Portfolio() {
                 >
                   <div className={`text-3xl font-bold mb-2 ${
                     isDarkMode ? 'text-green-400' : 'text-green-600'
-                  }`}>15+</div>
+                  }`}>25</div>
                   <div className={`text-sm ${
                     isDarkMode ? 'text-gray-300' : 'text-gray-700'
                   }`}>Technologies Mastered</div>
@@ -1209,6 +1247,8 @@ export default function Portfolio() {
               <div className="space-y-6">
                 <motion.a
                   href="mailto:mohamedimranworkmailspace@gmail.com"
+                  target="_blank"
+                  rel="noopener noreferrer"
                   whileHover={{ scale: 1.05 }}
                   className={`flex items-center gap-4 p-4 rounded-xl border transition-all ${
                     isDarkMode 
@@ -1224,7 +1264,7 @@ export default function Portfolio() {
                       Email Me
                     </p>
                     <p className={isDarkMode ? 'text-gray-400' : 'text-gray-600'}>
-                      mohamedimranworkmailspace@gmail.com
+                      Let’s connect and innovate together
                     </p>
                   </div>
                 </motion.a>
