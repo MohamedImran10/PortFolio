@@ -1,7 +1,7 @@
 import './globals.css'
 
 export const metadata = {
-  title: 'Mohamed Imran - Portfolio',
+  title: 'Portfolio',
   description: 'Full Stack Web Developer · Gen AI Enthusiast · Lifelong Learner',
 }
 

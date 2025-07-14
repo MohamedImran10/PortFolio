@@ -4,7 +4,7 @@ import React, { useState, useEffect, useRef } from 'react'
 import { motion, useScroll, useTransform, AnimatePresence } from 'framer-motion'
 import { Code, Terminal, Palette, Zap, Github, ExternalLink, Mail, Download, Sun, Moon, User, MessageSquare, CheckCircle, Send, ArrowRight, Linkedin } from 'lucide-react'
 
-const CodeRain = () => {
+const CodeRain = ({ isDarkMode }) => {
   const canvasRef = useRef(null)
   const animationRef = useRef(null)
 
@@ -33,10 +33,20 @@ const CodeRain = () => {
     }
 
     const draw = () => {
-      ctx.fillStyle = 'rgba(0, 0, 0, 0.05)'
+      // Background fade effect - different for light and dark themes
+      if (isDarkMode) {
+        ctx.fillStyle = 'rgba(0, 0, 0, 0.05)'
+      } else {
+        ctx.fillStyle = 'rgba(255, 255, 255, 0.05)'
+      }
       ctx.fillRect(0, 0, canvas.width, canvas.height)
 
-      ctx.fillStyle = '#00ff41'
+      // Text color - different for light and dark themes
+      if (isDarkMode) {
+        ctx.fillStyle = '#00ff41'
+      } else {
+        ctx.fillStyle = '#1e40af'
+      }
       ctx.font = `${fontSize}px monospace`
 
       for (let i = 0; i < drops.length; i++) {
@@ -63,7 +73,7 @@ const CodeRain = () => {
         cancelAnimationFrame(animationRef.current)
       }
     }
-  }, [])
+  }, [isDarkMode])
 
   return (
     <canvas
@@ -686,7 +696,7 @@ export default function Portfolio() {
     }`}>
       {/* Background Effects */}
       <div className="fixed inset-0 z-0" style={{ width: '100%', height: '100%', top: 0, left: 0 }}>
-        {isDarkMode && <CodeRain />}
+        <CodeRain isDarkMode={isDarkMode} />
         {isDarkMode && <ParticleField />}
         <motion.div
           className={`absolute inset-0 w-full ${
@@ -1344,7 +1354,7 @@ export default function Portfolio() {
       <footer className="relative border-t border-cyan-500/20 py-8">
         <div className="relative z-10 max-w-7xl mx-auto px-6 text-center">
           <p className="text-gray-500">
-            © 2024 Mohamed Imran. Crafted with passion and cutting-edge technology.
+            © 2025 Mohamed Imran. Crafted with passion and cutting-edge technology.
           </p>
         </div>
       </footer>
