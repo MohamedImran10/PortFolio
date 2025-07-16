@@ -6,7 +6,9 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "export": "next build",
+    "deploy": "gh-pages -d out"
   },
   "dependencies": {
     "framer-motion": "^10.16.4",
