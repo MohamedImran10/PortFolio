@@ -784,8 +784,8 @@ export default function Portfolio() {
             </motion.button>
 
             <motion.a
-              href="/Mohamed-Imran-M-Resume.pdf"
-              download="Mohamed-Imran-M-Resume.pdf"
+              href="/Mohamed-Imran-M-FlowCV-Resume-20250712.pdf"
+              download="Mohamed-Imran-M-FlowCV-Resume-20250712.pdf"
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
               className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors duration-500 ${
@@ -1336,8 +1336,8 @@ export default function Portfolio() {
                 className="mt-8"
               >
                 <motion.a
-                  href="/Mohamed-Imran-M-Resume.pdf"
-                  download="Mohamed-Imran-M-Resume.pdf"
+                  href="/Mohamed-Imran-M-FlowCV-Resume-20250712.pdf"
+                  download="Mohamed-Imran-M-FlowCV-Resume-20250712.pdf"
                   className="w-full bg-gradient-to-r from-green-500 to-cyan-500 px-8 py-4 rounded-xl font-medium flex items-center gap-2 justify-center text-lg text-white hover:shadow-lg hover:shadow-green-500/25 transition-all"
                 >
                   <Download size={24} />

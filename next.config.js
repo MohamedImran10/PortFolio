@@ -5,8 +5,9 @@ const nextConfig = {
   images: {
     unoptimized: true,
   },
-  basePath: '/PortFolio',
-  assetPrefix: '/PortFolio/',
+  // Remove basePath and assetPrefix for local development
+  // basePath: '/PortFolio',
+  // assetPrefix: '/PortFolio/',
 }
 
 module.exports = nextConfig
