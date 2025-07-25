@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect, useRef } from 'react'
 import { motion, useScroll, useTransform, AnimatePresence } from 'framer-motion'
-import { Code, Terminal, Palette, Zap, Github, ExternalLink, Mail, Download, Sun, Moon, User, MessageSquare, CheckCircle, Send, ArrowRight, Linkedin } from 'lucide-react'
+import { Code, Terminal, Palette, Zap, Github, Mail, Download, Sun, Moon, User, MessageSquare, ArrowRight, Linkedin } from 'lucide-react'
 
 const CodeRain = ({ isDarkMode }) => {
   const canvasRef = useRef(null)
@@ -309,37 +309,6 @@ const ProjectCard = ({ project, index, isDarkMode }) => {
               >
                 <Github size={16} />
               </motion.a>
-              {project.hosted ? (
-                <motion.a
-                  href={project.hosted}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  whileHover={{ scale: 1.1 }}
-                  whileTap={{ scale: 0.9 }}
-                  className={`p-2 rounded-lg transition-colors ${
-                    isDarkMode 
-                      ? 'bg-cyan-500/20 hover:bg-cyan-500/30 text-cyan-400'
-                      : 'bg-blue-500/20 hover:bg-blue-500/30 text-blue-600'
-                  }`}
-                  title="View Live Demo"
-                >
-                  <ExternalLink size={16} />
-                </motion.a>
-              ) : (
-                <motion.button
-                  whileHover={{ scale: 1.1 }}
-                  whileTap={{ scale: 0.9 }}
-                  className={`p-2 rounded-lg transition-colors opacity-50 cursor-not-allowed ${
-                    isDarkMode 
-                      ? 'bg-gray-500/20 text-gray-500'
-                      : 'bg-gray-400/20 text-gray-400'
-                  }`}
-                  title="Demo not available"
-                  disabled
-                >
-                  <ExternalLink size={16} />
-                </motion.button>
-              )}
             </div>
           </div>
           
@@ -422,191 +391,7 @@ const SkillOrb = ({ skill, index, isDarkMode }) => {
   )
 }
 
-const ContactForm = ({ isDarkMode }) => {
-  const [formData, setFormData] = useState({ name: '', email: '', message: '' })
-  const [isSubmitting, setIsSubmitting] = useState(false)
-  const [isSubmitted, setIsSubmitted] = useState(false)
 
-  const handleSubmit = async (e) => {
-    e.preventDefault()
-    setIsSubmitting(true)
-    
-    try {
-      // Send email using our API route
-      const response = await fetch('/api/contact', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          name: formData.name,
-          email: formData.email,
-          message: formData.message
-        }),
-      })
-      
-      if (response.ok) {
-        setIsSubmitting(false)
-        setIsSubmitted(true)
-        
-        // Reset form after showing success message
-        setTimeout(() => {
-          setIsSubmitted(false)
-          setFormData({ name: '', email: '', message: '' })
-        }, 3000)
-      } else {
-        throw new Error('Failed to send message')
-      }
-    } catch (error) {
-      console.error('Error sending message:', error)
-      setIsSubmitting(false)
-      // You could add error handling here
-      alert('Failed to send message. Please try again or contact me directly at mohamedimranworkmailspace@gmail.com')
-    }
-  }
-
-  const handleChange = (e) => {
-    setFormData(prev => ({
-      ...prev,
-      [e.target.name]: e.target.value
-    }))
-  }
-
-  if (isSubmitted) {
-    return (
-      <motion.div
-        initial={{ opacity: 0, scale: 0.8 }}
-        animate={{ opacity: 1, scale: 1 }}
-        className="text-center py-12"
-      >
-        <motion.div
-          initial={{ scale: 0 }}
-          animate={{ scale: 1 }}
-          transition={{ delay: 0.2, type: "spring", stiffness: 200 }}
-          className="w-20 h-20 mx-auto mb-6 bg-gradient-to-r from-green-500 to-cyan-500 rounded-full flex items-center justify-center"
-        >
-          <CheckCircle size={40} className="text-white" />
-        </motion.div>
-        <motion.h3
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.4 }}
-          className={`text-2xl font-bold mb-4 ${
-            isDarkMode ? 'text-white' : 'text-gray-900'
-          }`}
-        >
-          Message Sent Successfully!
-        </motion.h3>
-        <motion.p
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.6 }}
-          className={isDarkMode ? 'text-gray-300' : 'text-gray-600'}
-        >
-          Thanks for reaching out! I'll get back to you soon.
-        </motion.p>
-      </motion.div>
-    )
-  }
-
-  return (
-    <form onSubmit={handleSubmit} className="space-y-6">
-      <div>
-        <label className={`block text-sm font-medium mb-2 ${
-          isDarkMode ? 'text-gray-300' : 'text-gray-700'
-        }`}>
-          Name
-        </label>
-        <motion.input
-          whileFocus={{ scale: 1.02 }}
-          type="text"
-          name="name"
-          value={formData.name}
-          onChange={handleChange}
-          required
-          className={`w-full px-4 py-3 rounded-xl border transition-all focus:outline-none focus:ring-2 ${
-            isDarkMode 
-              ? 'bg-gray-800/50 border-gray-600 text-white focus:ring-green-500/50 focus:border-green-500'
-              : 'bg-gray-50/50 border-gray-300 text-gray-900 focus:ring-green-500/50 focus:border-green-500'
-          }`}
-          placeholder="Your name"
-        />
-      </div>
-
-      <div>
-        <label className={`block text-sm font-medium mb-2 ${
-          isDarkMode ? 'text-gray-300' : 'text-gray-700'
-        }`}>
-          Email
-        </label>
-        <motion.input
-          whileFocus={{ scale: 1.02 }}
-          type="email"
-          name="email"
-          value={formData.email}
-          onChange={handleChange}
-          required
-          className={`w-full px-4 py-3 rounded-xl border transition-all focus:outline-none focus:ring-2 ${
-            isDarkMode 
-              ? 'bg-gray-800/50 border-gray-600 text-white focus:ring-green-500/50 focus:border-green-500'
-              : 'bg-gray-50/50 border-gray-300 text-gray-900 focus:ring-green-500/50 focus:border-green-500'
-          }`}
-          placeholder="your.email@example.com"
-        />
-      </div>
-
-      <div>
-        <label className={`block text-sm font-medium mb-2 ${
-          isDarkMode ? 'text-gray-300' : 'text-gray-700'
-        }`}>
-          Message
-        </label>
-        <motion.textarea
-          whileFocus={{ scale: 1.02 }}
-          name="message"
-          value={formData.message}
-          onChange={handleChange}
-          required
-          rows={5}
-          className={`w-full px-4 py-3 rounded-xl border transition-all focus:outline-none focus:ring-2 resize-none ${
-            isDarkMode 
-              ? 'bg-gray-800/50 border-gray-600 text-white focus:ring-green-500/50 focus:border-green-500'
-              : 'bg-gray-50/50 border-gray-300 text-gray-900 focus:ring-green-500/50 focus:border-green-500'
-          }`}
-          placeholder="Tell me about your project or just say hello!"
-        />
-      </div>
-
-      <motion.button
-        type="submit"
-        disabled={isSubmitting}
-        whileHover={{ scale: isSubmitting ? 1 : 1.02 }}
-        whileTap={{ scale: isSubmitting ? 1 : 0.98 }}
-        className={`w-full py-4 rounded-xl font-medium text-white transition-all flex items-center justify-center gap-2 ${
-          isSubmitting 
-            ? 'bg-gray-500 cursor-not-allowed' 
-            : 'bg-gradient-to-r from-green-500 to-cyan-500 hover:shadow-lg hover:shadow-green-500/25'
-        }`}
-      >
-        {isSubmitting ? (
-          <>
-            <motion.div
-              animate={{ rotate: 360 }}
-              transition={{ duration: 1, repeat: Infinity, ease: "linear" }}
-              className="w-5 h-5 border-2 border-white border-t-transparent rounded-full"
-            />
-            Sending...
-          </>
-        ) : (
-          <>
-            <Send size={20} />
-            Send Message
-          </>
-        )}
-      </motion.button>
-    </form>
-  )
-}
 
 export default function Portfolio() {
   const { scrollYProgress } = useScroll()
@@ -1217,28 +1002,12 @@ export default function Portfolio() {
             </p>
           </motion.div>
 
-          <div className="grid lg:grid-cols-2 gap-12 items-start">
-            {/* Contact Form */}
-            <motion.div
-              initial={{ opacity: 0, x: -50 }}
-              whileInView={{ opacity: 1, x: 0 }}
-              transition={{ duration: 0.8 }}
-              className="relative"
-            >
-              <div className={`relative backdrop-blur-lg rounded-2xl p-8 border ${
-                isDarkMode 
-                  ? 'bg-gray-900/50 border-gray-700/50' 
-                  : 'bg-white/50 border-gray-300/50'
-              }`}>
-                <ContactForm isDarkMode={isDarkMode} />
-              </div>
-            </motion.div>
-
+          <div className="max-w-3xl mx-auto">
             {/* Contact Info */}
             <motion.div
-              initial={{ opacity: 0, x: 50 }}
-              whileInView={{ opacity: 1, x: 0 }}
-              transition={{ duration: 0.8, delay: 0.2 }}
+              initial={{ opacity: 0, y: 50 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.8 }}
               className="space-y-8"
             >
               <div>
