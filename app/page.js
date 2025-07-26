@@ -434,7 +434,7 @@ export default function Portfolio() {
 
   const skills = [
     // Frontend Technologies
-    'HTML5', 'CSS3', 'JavaScript', 'JSP', 'ReactJS', 'Next.js', 'Bootstrap', 'jQuery',
+    'HTML5', 'CSS3', 'JavaScript', 'JSP', 'Bootstrap',
     // Backend Technologies
     'Java', 'Python', 'Django', 'Flask', 'RESTful APIs',
     // Programming Languages
