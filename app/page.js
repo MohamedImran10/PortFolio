@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect, useRef } from 'react'
 import { motion, useScroll, useTransform, AnimatePresence } from 'framer-motion'
-import { Code, Terminal, Palette, Zap, Github, Mail, Download, Sun, Moon, User, MessageSquare, ArrowRight, Linkedin } from 'lucide-react'
+import { Code, Terminal, Palette, Zap, Github, Mail, Download, Sun, Moon, User, MessageSquare, ArrowRight, Linkedin, Menu, X } from 'lucide-react'
 
 const CodeRain = ({ isDarkMode }) => {
   const canvasRef = useRef(null)
@@ -398,6 +398,7 @@ export default function Portfolio() {
   const backgroundY = useTransform(scrollYProgress, [0, 1], ['0%', '100%'])
   const [currentSection, setCurrentSection] = useState(0)
   const [isDarkMode, setIsDarkMode] = useState(true)
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
 
   const projects = [
     {
@@ -516,6 +517,7 @@ export default function Portfolio() {
             &lt;DEV/&gt;
           </GlitchText>
           
+          {/* Desktop Navigation */}
           <div className="hidden md:flex space-x-8">
             {['Home', 'About', 'Projects', 'Skills', 'Contact'].map((item, index) => (
               <motion.a
@@ -568,12 +570,13 @@ export default function Portfolio() {
               </motion.div>
             </motion.button>
 
+            {/* Desktop Resume Button */}
             <motion.a
               href="/Mohamed-Imran-M-FlowCV-Resume-20250712.pdf"
               download="Mohamed-Imran-M-FlowCV-Resume-20250712.pdf"
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
-              className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors duration-500 ${
+              className={`hidden md:block px-4 py-2 rounded-lg text-sm font-medium transition-colors duration-500 ${
                 isDarkMode 
                   ? 'bg-gradient-to-r from-cyan-500 to-purple-500 text-white'
                   : 'bg-gradient-to-r from-blue-500 to-purple-500 text-white'
@@ -581,8 +584,85 @@ export default function Portfolio() {
             >
               Download Resume
             </motion.a>
+
+            {/* Mobile Menu Button */}
+            <motion.button
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
+              onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+              className={`md:hidden p-2 rounded-lg transition-colors ${
+                isDarkMode 
+                  ? 'text-cyan-400 hover:bg-cyan-500/10'
+                  : 'text-blue-600 hover:bg-blue-500/10'
+              }`}
+            >
+              {isMobileMenuOpen ? <X size={24} /> : <Menu size={24} />}
+            </motion.button>
           </div>
         </div>
+
+        {/* Mobile Menu */}
+        <AnimatePresence>
+          {isMobileMenuOpen && (
+            <motion.div
+              initial={{ opacity: 0, height: 0 }}
+              animate={{ opacity: 1, height: 'auto' }}
+              exit={{ opacity: 0, height: 0 }}
+              transition={{ duration: 0.3 }}
+              className={`md:hidden border-t ${
+                isDarkMode ? 'border-cyan-500/20' : 'border-gray-200'
+              }`}
+            >
+              <div className={`px-6 py-4 backdrop-blur-md ${
+                isDarkMode ? 'bg-black/40' : 'bg-white/80'
+              }`}>
+                <div className="space-y-4">
+                  {['Home', 'About', 'Projects', 'Skills', 'Contact'].map((item, index) => (
+                    <motion.a
+                      key={item}
+                      href={`#${item.toLowerCase()}`}
+                      initial={{ opacity: 0, x: -20 }}
+                      animate={{ opacity: 1, x: 0 }}
+                      transition={{ delay: index * 0.1 }}
+                      className={`block text-lg font-medium transition-colors ${
+                        currentSection === index 
+                          ? (isDarkMode ? 'text-cyan-400' : 'text-blue-600')
+                          : (isDarkMode ? 'text-gray-300 hover:text-cyan-400' : 'text-gray-600 hover:text-blue-600')
+                      }`}
+                      onClick={(e) => {
+                        e.preventDefault()
+                        setCurrentSection(index)
+                        setIsMobileMenuOpen(false)
+                        document.getElementById(item.toLowerCase())?.scrollIntoView({
+                          behavior: 'smooth'
+                        })
+                      }}
+                    >
+                      {item}
+                    </motion.a>
+                  ))}
+                  
+                  {/* Mobile Resume Button */}
+                  <motion.a
+                    href="/Mohamed-Imran-M-FlowCV-Resume-20250712.pdf"
+                    download="Mohamed-Imran-M-FlowCV-Resume-20250712.pdf"
+                    initial={{ opacity: 0, x: -20 }}
+                    animate={{ opacity: 1, x: 0 }}
+                    transition={{ delay: 0.6 }}
+                    className={`block w-full text-center px-4 py-3 rounded-lg text-sm font-medium transition-colors duration-500 ${
+                      isDarkMode 
+                        ? 'bg-gradient-to-r from-cyan-500 to-purple-500 text-white'
+                        : 'bg-gradient-to-r from-blue-500 to-purple-500 text-white'
+                    }`}
+                    onClick={() => setIsMobileMenuOpen(false)}
+                  >
+                    Download Resume
+                  </motion.a>
+                </div>
+              </div>
+            </motion.div>
+          )}
+        </AnimatePresence>
       </motion.nav>
 
       {/* Hero Section */}
