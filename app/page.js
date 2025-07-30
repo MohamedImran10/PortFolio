@@ -901,7 +901,7 @@ export default function Portfolio() {
                 >
                   <div className={`text-3xl font-bold mb-2 ${
                     isDarkMode ? 'text-green-400' : 'text-green-600'
-                  }`}>25</div>
+                  }`}>22</div>
                   <div className={`text-sm ${
                     isDarkMode ? 'text-gray-300' : 'text-gray-700'
                   }`}>Technologies Mastered</div>
