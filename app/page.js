@@ -572,8 +572,8 @@ export default function Portfolio() {
 
             {/* Desktop Resume Button */}
             <motion.a
-              href="/Mohamed-Imran-M-FlowCV-Resume-20250712.pdf"
-              download="Mohamed-Imran-M-FlowCV-Resume-20250712.pdf"
+              href="/Mohamed-Imran-M-Resume.pdf"
+              download="Mohamed-Imran-M-Resume.pdf"
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
               className={`hidden md:block px-4 py-2 rounded-lg text-sm font-medium transition-colors duration-500 ${
@@ -644,8 +644,8 @@ export default function Portfolio() {
                   
                   {/* Mobile Resume Button */}
                   <motion.a
-                    href="/Mohamed-Imran-M-FlowCV-Resume-20250712.pdf"
-                    download="Mohamed-Imran-M-FlowCV-Resume-20250712.pdf"
+                    href="/Mohamed-Imran-M-Resume.pdf"
+                    download="Mohamed-Imran-M-Resume.pdf"
                     initial={{ opacity: 0, x: -20 }}
                     animate={{ opacity: 1, x: 0 }}
                     transition={{ delay: 0.6 }}
@@ -1185,8 +1185,8 @@ export default function Portfolio() {
                 className="mt-8"
               >
                 <motion.a
-                  href="/Mohamed-Imran-M-FlowCV-Resume-20250712.pdf"
-                  download="Mohamed-Imran-M-FlowCV-Resume-20250712.pdf"
+                  href="/Mohamed-Imran-M-Resume.pdf"
+                  download="Mohamed-Imran-M-Resume.pdf"
                   className="w-full bg-gradient-to-r from-green-500 to-cyan-500 px-8 py-4 rounded-xl font-medium flex items-center gap-2 justify-center text-lg text-white hover:shadow-lg hover:shadow-green-500/25 transition-all"
                 >
                   <Download size={24} />
