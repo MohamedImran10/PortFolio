@@ -430,6 +430,16 @@ export default function Portfolio() {
       image: '/api/placeholder/400/300',
       github: 'https://github.com/MohamedImran10/Hotel_Management',
       hosted: null // Add your hosted URL here when available
+    },
+    {
+      id: '4',
+      title: 'RSS Feed Reader',
+      description: 'Django-based responsive web application for reading and managing RSS feeds with real-time updates, accessibility features, and modern UI.',
+      tech: ['Django', 'Bootstrap 5', 'Vanilla JavaScript', 'SQLite'],
+      color: 'orange',
+      image: '/api/placeholder/400/300',
+      github: 'https://github.com/MohamedImran10/News_Feed_app',
+      hosted: null // Add your hosted URL here when available
     }
   ]
 
@@ -880,7 +890,7 @@ export default function Portfolio() {
                 >
                   <div className={`text-3xl font-bold mb-2 ${
                     isDarkMode ? 'text-purple-400' : 'text-purple-600'
-                  }`}>3</div>
+                  }`}>4</div>
                   <div className={`text-sm ${
                     isDarkMode ? 'text-gray-300' : 'text-gray-700'
                   }`}>Projects Completed</div>
