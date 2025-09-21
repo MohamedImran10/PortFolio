@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect, useRef } from 'react'
 import { motion, useScroll, useTransform, AnimatePresence } from 'framer-motion'
-import { Code, Terminal, Palette, Zap, Github, Mail, Download, Sun, Moon, User, MessageSquare, ArrowRight, Linkedin, Menu, X } from 'lucide-react'
+import { Code, Terminal, Palette, Zap, Github, Mail, Download, Sun, Moon, User, MessageSquare, ArrowRight, Linkedin, Menu, X, Eye } from 'lucide-react'
 
 const CodeRain = ({ isDarkMode }) => {
   const canvasRef = useRef(null)
@@ -580,20 +580,38 @@ export default function Portfolio() {
               </motion.div>
             </motion.button>
 
-            {/* Desktop Resume Button */}
-            <motion.a
-              href="/Mohamed-Imran-Pythondev-Resume.pdf"
-              download="Mohamed-Imran-Pythondev-Resume.pdf"
-              whileHover={{ scale: 1.05 }}
-              whileTap={{ scale: 0.95 }}
-              className={`hidden md:block px-4 py-2 rounded-lg text-sm font-medium transition-colors duration-500 ${
-                isDarkMode 
-                  ? 'bg-gradient-to-r from-cyan-500 to-purple-500 text-white'
-                  : 'bg-gradient-to-r from-blue-500 to-purple-500 text-white'
-              }`}
-            >
-              Download Resume
-            </motion.a>
+            {/* Desktop Resume Buttons */}
+            <div className="hidden md:flex gap-3">
+              <motion.a
+                href="/Mohamed-Imran-Pythondev-Resume.pdf"
+                download="Mohamed-Imran-Pythondev-Resume.pdf"
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
+                className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors duration-500 ${
+                  isDarkMode 
+                    ? 'bg-gradient-to-r from-cyan-500 to-purple-500 text-white'
+                    : 'bg-gradient-to-r from-blue-500 to-purple-500 text-white'
+                }`}
+              >
+                Download Resume
+              </motion.a>
+
+              <motion.a
+                href="/Mohamed-Imran-Pythondev-Resume.pdf"
+                target="_blank"
+                rel="noopener noreferrer"
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
+                className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors duration-500 flex items-center gap-2 ${
+                  isDarkMode 
+                    ? 'bg-gradient-to-r from-emerald-500 to-teal-500 text-white'
+                    : 'bg-gradient-to-r from-green-500 to-emerald-500 text-white'
+                }`}
+              >
+                <Eye size={16} />
+                View Resume
+              </motion.a>
+            </div>
 
             {/* Mobile Menu Button */}
             <motion.button
@@ -652,22 +670,42 @@ export default function Portfolio() {
                     </motion.a>
                   ))}
                   
-                  {/* Mobile Resume Button */}
-                  <motion.a
-                    href="/Mohamed-Imran-Pythondev-Resume.pdf"
-                    download="Mohamed-Imran-Pythondev-Resume.pdf"
-                    initial={{ opacity: 0, x: -20 }}
-                    animate={{ opacity: 1, x: 0 }}
-                    transition={{ delay: 0.6 }}
-                    className={`block w-full text-center px-4 py-3 rounded-lg text-sm font-medium transition-colors duration-500 ${
-                      isDarkMode 
-                        ? 'bg-gradient-to-r from-cyan-500 to-purple-500 text-white'
-                        : 'bg-gradient-to-r from-blue-500 to-purple-500 text-white'
-                    }`}
-                    onClick={() => setIsMobileMenuOpen(false)}
-                  >
-                    Download Resume
-                  </motion.a>
+                  {/* Mobile Resume Buttons */}
+                  <div className="space-y-3">
+                    <motion.a
+                      href="/Mohamed-Imran-Pythondev-Resume.pdf"
+                      download="Mohamed-Imran-Pythondev-Resume.pdf"
+                      initial={{ opacity: 0, x: -20 }}
+                      animate={{ opacity: 1, x: 0 }}
+                      transition={{ delay: 0.6 }}
+                      className={`block w-full text-center px-4 py-3 rounded-lg text-sm font-medium transition-colors duration-500 ${
+                        isDarkMode 
+                          ? 'bg-gradient-to-r from-cyan-500 to-purple-500 text-white'
+                          : 'bg-gradient-to-r from-blue-500 to-purple-500 text-white'
+                      }`}
+                      onClick={() => setIsMobileMenuOpen(false)}
+                    >
+                      Download Resume
+                    </motion.a>
+
+                    <motion.a
+                      href="/Mohamed-Imran-Pythondev-Resume.pdf"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      initial={{ opacity: 0, x: -20 }}
+                      animate={{ opacity: 1, x: 0 }}
+                      transition={{ delay: 0.7 }}
+                      className={`block w-full text-center px-4 py-3 rounded-lg text-sm font-medium transition-colors duration-500 flex items-center justify-center gap-2 ${
+                        isDarkMode 
+                          ? 'bg-gradient-to-r from-emerald-500 to-teal-500 text-white'
+                          : 'bg-gradient-to-r from-green-500 to-emerald-500 text-white'
+                      }`}
+                      onClick={() => setIsMobileMenuOpen(false)}
+                    >
+                      <Eye size={16} />
+                      View Resume
+                    </motion.a>
+                  </div>
                 </div>
               </div>
             </motion.div>
