@@ -57,12 +57,11 @@ export async function POST(request) {
     const sheet = doc.sheetsByIndex[0]; // or use `doc.sheetsByTitle[title]`
 
     // The header values **must** match the column headers in your sheet
-    // Make sure your Google Sheet has columns: Name, Email, Message, Timestamp
+    // Make sure your Google Sheet has columns: Name, Email, Message
     const newRow = await sheet.addRow({
       Name: body.name,
       Email: body.email,
       Message: body.message,
-      Timestamp: new Date().toISOString(),
     });
     
     return NextResponse.json({ 
