@@ -21,6 +21,19 @@ const doc = new GoogleSpreadsheet(SPREADSHEET_ID, serviceAccountAuth);
 
 export async function POST(request) {
   try {
+    // Check if environment variables are loaded
+    if (!SPREADSHEET_ID || !SERVICE_ACCOUNT_EMAIL || !PRIVATE_KEY) {
+      console.error('Missing environment variables:', {
+        SPREADSHEET_ID: !!SPREADSHEET_ID,
+        SERVICE_ACCOUNT_EMAIL: !!SERVICE_ACCOUNT_EMAIL,
+        PRIVATE_KEY: !!PRIVATE_KEY
+      });
+      return NextResponse.json({ 
+        error: 'Server configuration error. Please contact the administrator.',
+        success: false 
+      }, { status: 500 });
+    }
+
     const body = await request.json();
     
     // Validate required fields
@@ -59,9 +72,15 @@ export async function POST(request) {
 
   } catch (error) {
     console.error('Error submitting to Google Sheets:', error);
+    console.error('Error details:', {
+      message: error.message,
+      stack: error.stack,
+      name: error.name
+    });
     return NextResponse.json({ 
       error: 'Sorry, there was an error sending your message. Please try again or contact me directly.',
-      success: false 
+      success: false,
+      details: process.env.NODE_ENV === 'development' ? error.message : undefined
     }, { status: 500 });
   }
 }
