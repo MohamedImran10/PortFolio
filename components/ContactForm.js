@@ -221,16 +221,6 @@ export default function ContactForm({ isDarkMode }) {
         </motion.button>
       </form>
 
-      <motion.p
-        initial={{ opacity: 0 }}
-        whileInView={{ opacity: 1 }}
-        transition={{ delay: 0.5 }}
-        className={`text-sm mt-4 text-center ${
-          isDarkMode ? 'text-gray-400' : 'text-gray-600'
-        }`}
-      >
-        I typically respond within 24 hours. Looking forward to hearing from you! 🚀
-      </motion.p>
     </motion.div>
   );
 }
