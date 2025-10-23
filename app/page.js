@@ -1131,29 +1131,14 @@ export default function Portfolio() {
             </p>
           </motion.div>
 
-          <div className="max-w-3xl mx-auto">
-            {/* Contact Info */}
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 items-start">
+            {/* Left Column - Contact Info */}
             <motion.div
-              initial={{ opacity: 0, y: 50 }}
-              whileInView={{ opacity: 1, y: 0 }}
+              initial={{ opacity: 0, x: -50 }}
+              whileInView={{ opacity: 1, x: 0 }}
               transition={{ duration: 0.8 }}
-              className="space-y-8"
+              className="space-y-6"
             >
-              <div>
-                <h3 className={`text-2xl font-bold mb-6 ${
-                  isDarkMode ? 'text-white' : 'text-gray-900'
-                }`}>
-                  Get In Touch
-                </h3>
-                <p className={`text-lg leading-relaxed ${
-                  isDarkMode ? 'text-gray-300' : 'text-gray-600'
-                }`}>
-                  I'm always excited to work on new projects and collaborate with 
-                  passionate people. Whether you have a project in mind or just 
-                  want to chat about technology, feel free to reach out!
-                </p>
-              </div>
-
               <div className="space-y-6">
                 <motion.a
                   href="mailto:mohamedimranworkmailspace@gmail.com"
@@ -1244,6 +1229,9 @@ export default function Portfolio() {
                 </motion.a>
               </motion.div>
             </motion.div>
+
+            {/* Right Column - Contact Form */}
+            <ContactForm isDarkMode={isDarkMode} />
           </div>
         </div>
       </section>
