@@ -69,7 +69,21 @@ ${escapeMd(message)}
           text: text,
           parse_mode: "MarkdownV2",
         }),
-      }).catch(err => console.log("Telegram notification failed:", err.message));
+      })
+        .then(async (res) => {
+          if (!res.ok) {
+            const errorText = await res.text();
+            console.error("❌ Telegram API error:", res.status, errorText);
+          } else {
+            console.log("✅ Telegram notification sent successfully");
+          }
+        })
+        .catch(err => {
+          console.error("❌ Telegram notification failed:", err.message);
+          console.error("Stack:", err.stack);
+        });
+    } else {
+      console.warn("⚠️ Telegram credentials missing. TELEGRAM_BOT_TOKEN:", !!TELEGRAM_BOT_TOKEN, "TELEGRAM_CHAT_ID:", !!TELEGRAM_CHAT_ID);
     }
 
     // 3. Always respond successfully to user
