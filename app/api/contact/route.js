@@ -1,6 +1,19 @@
 import { NextResponse } from "next/server";
 import { analyzeMessage } from "../../../lib/ai-agent"; 
 
+// Debug endpoint - remove after testing
+export async function GET(request) {
+  const { TELEGRAM_BOT_TOKEN, TELEGRAM_CHAT_ID, GEMINI_API_KEY } = process.env;
+  
+  return NextResponse.json({
+    telegram_bot_token: TELEGRAM_BOT_TOKEN ? `✅ Set (length: ${TELEGRAM_BOT_TOKEN.length})` : '❌ Missing',
+    telegram_chat_id: TELEGRAM_CHAT_ID ? `✅ Set (${TELEGRAM_CHAT_ID})` : '❌ Missing',
+    gemini_api_key: GEMINI_API_KEY ? `✅ Set (length: ${GEMINI_API_KEY.length})` : '❌ Missing',
+    node_env: process.env.NODE_ENV,
+    timestamp: new Date().toISOString(),
+  });
+}
+
 export async function POST(request) {
   try {
     const { name, email, message } = await request.json();
