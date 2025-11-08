@@ -307,9 +307,27 @@ const ProjectCard = ({ project, index, isDarkMode }) => {
                     ? 'bg-cyan-500/20 hover:bg-cyan-500/30 text-cyan-400'
                     : 'bg-blue-500/20 hover:bg-blue-500/30 text-blue-600'
                 }`}
+                title="View on GitHub"
               >
                 <Github size={16} />
               </motion.a>
+              {project.hosted && (
+                <motion.a
+                  href={project.hosted}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  whileHover={{ scale: 1.1 }}
+                  whileTap={{ scale: 0.9 }}
+                  className={`p-2 rounded-lg transition-colors ${
+                    isDarkMode 
+                      ? 'bg-green-500/20 hover:bg-green-500/30 text-green-400'
+                      : 'bg-green-500/20 hover:bg-green-500/30 text-green-600'
+                  }`}
+                  title="View Live Production"
+                >
+                  <Eye size={16} />
+                </motion.a>
+              )}
             </div>
           </div>
           
