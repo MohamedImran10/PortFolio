@@ -441,6 +441,16 @@ export default function Portfolio() {
       image: '/api/placeholder/400/300',
       github: 'https://github.com/MohamedImran10/News_Feed_app',
       hosted: null // Add your hosted URL here when available
+    },
+    {
+      id: '5',
+      title: 'SmartLoan AI: Credit Default Prediction',
+      description: 'AI-powered web application that predicts credit default risk using machine learning to help financial institutions assess loan applicants.',
+      tech: ['Flask', 'scikit-learn', 'Bootstrap', 'JavaScript'],
+      color: 'blue',
+      image: '/api/placeholder/400/300',
+      github: 'https://github.com/MohamedImran10/SmartLoan_AI',
+      hosted: 'https://smartloan-ai.onrender.com/'
     }
   ]
 
