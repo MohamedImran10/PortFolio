@@ -74,30 +74,50 @@ ${escapeMd(message)}
 
       const telegramApiUrl = `https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/sendMessage`;
 
-      // Try sending to Telegram with better error handling using axios
-      try {
-        const response = await axios.post(telegramApiUrl, {
-          chat_id: TELEGRAM_CHAT_ID,
-          text: text,
-          parse_mode: "MarkdownV2",
-        }, {
-          timeout: 10000, // 10 second timeout
-        });
+      // Try sending to Telegram with retry logic
+      const sendTelegramWithRetry = async (maxRetries = 3) => {
+        for (let attempt = 1; attempt <= maxRetries; attempt++) {
+          try {
+            console.log(`📤 Telegram attempt ${attempt}/${maxRetries}`);
+            
+            const response = await axios.post(telegramApiUrl, {
+              chat_id: TELEGRAM_CHAT_ID,
+              text: text,
+              parse_mode: "MarkdownV2",
+            }, {
+              timeout: 10000, // 10 second timeout
+            });
 
-        console.log("✅ Telegram notification sent successfully", {
-          messageId: response.data.result?.message_id,
-          chatId: response.data.result?.chat?.id
-        });
+            console.log("✅ Telegram notification sent successfully", {
+              messageId: response.data.result?.message_id,
+              chatId: response.data.result?.chat?.id,
+              attempt: attempt
+            });
+            return true;
 
-      } catch (telegramError) {
-        console.error("❌ Telegram error details:", {
-          message: telegramError.message,
-          status: telegramError.response?.status,
-          data: telegramError.response?.data,
-          token_length: TELEGRAM_BOT_TOKEN?.length,
-          chat_id: TELEGRAM_CHAT_ID,
-        });
-      }
+          } catch (telegramError) {
+            console.error(`❌ Telegram attempt ${attempt} failed:`, {
+              message: telegramError.message,
+              status: telegramError.response?.status,
+              data: telegramError.response?.data,
+              attempt: attempt,
+              retrying: attempt < maxRetries
+            });
+
+            // Wait before retrying (exponential backoff)
+            if (attempt < maxRetries) {
+              const delay = Math.min(1000 * Math.pow(2, attempt - 1), 5000);
+              await new Promise(resolve => setTimeout(resolve, delay));
+            }
+          }
+        }
+        return false;
+      };
+
+      // Send Telegram in background
+      sendTelegramWithRetry().catch(err => {
+        console.error("❌ Telegram failed after all retries:", err.message);
+      });
     } else {
       console.warn("⚠️ Telegram credentials missing. TELEGRAM_BOT_TOKEN:", !!TELEGRAM_BOT_TOKEN, "TELEGRAM_CHAT_ID:", !!TELEGRAM_CHAT_ID);
     }
