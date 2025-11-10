@@ -55,22 +55,22 @@ export async function POST(request) {
     if (TELEGRAM_BOT_TOKEN && TELEGRAM_CHAT_ID) {
       // Send Telegram notification in background (don't wait for it)
       const escapeMd = (text) => {
+        // Properly escape all MarkdownV2 special characters
         return text.replace(/([_*\[\]()~`>#+=|{}.!-])/g, "\\$1");
       };
 
-      const text = `
-*New Portfolio Message* 🚀
+      // Use plain text instead of MarkdownV2 to avoid parsing issues
+      const text = `New Portfolio Message 🚀
 
-*From:* ${escapeMd(name)}
-*Email:* ${escapeMd(email)}
+From: ${name}
+Email: ${email}
 
-*AI Analysis:*
-  \\- *Priority:* ${escapeMd(analysis.priority)}
-  \\- *Intent:* ${escapeMd(analysis.intent)}
+AI Analysis:
+- Priority: ${analysis.priority}
+- Intent: ${analysis.intent}
 
-*Message:*
-${escapeMd(message)}
-      `;
+Message:
+${message}`;
 
       const telegramApiUrl = `https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/sendMessage`;
 
@@ -83,30 +83,41 @@ ${escapeMd(message)}
             const response = await axios.post(telegramApiUrl, {
               chat_id: TELEGRAM_CHAT_ID,
               text: text,
-              parse_mode: "MarkdownV2",
+              // Remove parse_mode for plain text to avoid parsing errors
             }, {
               timeout: 10000, // 10 second timeout
+              headers: {
+                'Content-Type': 'application/json'
+              }
             });
 
             console.log("✅ Telegram notification sent successfully", {
-              messageId: response.data.result?.message_id,
-              chatId: response.data.result?.chat?.id,
+              messageId: response.data?.result?.message_id,
+              chatId: response.data?.result?.chat?.id,
               attempt: attempt
             });
             return true;
 
           } catch (telegramError) {
-            console.error(`❌ Telegram attempt ${attempt} failed:`, {
+            // Extract detailed error info
+            const errorInfo = {
               message: telegramError.message,
+              code: telegramError.code,
               status: telegramError.response?.status,
+              statusText: telegramError.response?.statusText,
               data: telegramError.response?.data,
+              errno: telegramError.errno,
+              syscall: telegramError.syscall,
               attempt: attempt,
               retrying: attempt < maxRetries
-            });
+            };
+
+            console.error(`❌ Telegram attempt ${attempt} failed:`, errorInfo);
 
             // Wait before retrying (exponential backoff)
             if (attempt < maxRetries) {
               const delay = Math.min(1000 * Math.pow(2, attempt - 1), 5000);
+              console.log(`⏳ Waiting ${delay}ms before retry...`);
               await new Promise(resolve => setTimeout(resolve, delay));
             }
           }
@@ -114,9 +125,12 @@ ${escapeMd(message)}
         return false;
       };
 
-      // Send Telegram in background
+      // Send Telegram in background (non-blocking)
       sendTelegramWithRetry().catch(err => {
-        console.error("❌ Telegram failed after all retries:", err.message);
+        console.error("❌ Telegram failed after all retries:", {
+          message: err.message,
+          code: err.code
+        });
       });
     } else {
       console.warn("⚠️ Telegram credentials missing. TELEGRAM_BOT_TOKEN:", !!TELEGRAM_BOT_TOKEN, "TELEGRAM_CHAT_ID:", !!TELEGRAM_CHAT_ID);
