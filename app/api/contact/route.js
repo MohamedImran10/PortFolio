@@ -73,27 +73,40 @@ ${escapeMd(message)}
 
       const telegramApiUrl = `https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/sendMessage`;
 
-      // Fire and forget - don't block the response
-      fetch(telegramApiUrl, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
+      // Try sending to Telegram with better error handling
+      try {
+        const response = await fetch(telegramApiUrl, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            chat_id: TELEGRAM_CHAT_ID,
+            text: text,
+            parse_mode: "MarkdownV2",
+          }),
+        });
+
+        const data = await response.json();
+        
+        if (!response.ok) {
+          console.error("❌ Telegram API error:", {
+            status: response.status,
+            statusText: response.statusText,
+            data: data
+          });
+          throw new Error(`Telegram API error: ${response.status} ${data.description || 'Unknown error'}`);
+        }
+
+        console.log("✅ Telegram notification sent successfully", {
+          messageId: data.result?.message_id,
+          chatId: data.result?.chat?.id
+        });
+
+      } catch (telegramError) {
+        console.error("❌ Telegram error details:", {
+          message: telegramError.message,
+          stack: telegramError.stack,
+          token_length: TELEGRAM_BOT_TOKEN?.length,
           chat_id: TELEGRAM_CHAT_ID,
-          text: text,
-          parse_mode: "MarkdownV2",
-        }),
-      })
-        .then(async (res) => {
-          if (!res.ok) {
-            const errorText = await res.text();
-            console.error("❌ Telegram API error:", res.status, errorText);
-          } else {
-            console.log("✅ Telegram notification sent successfully");
-          }
-        })
-        .catch(err => {
-          console.error("❌ Telegram notification failed:", err.message);
-          console.error("Stack:", err.stack);
         });
     } else {
       console.warn("⚠️ Telegram credentials missing. TELEGRAM_BOT_TOKEN:", !!TELEGRAM_BOT_TOKEN, "TELEGRAM_CHAT_ID:", !!TELEGRAM_CHAT_ID);
