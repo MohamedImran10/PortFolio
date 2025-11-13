@@ -1259,7 +1259,9 @@ export default function Portfolio() {
             </motion.div>
 
             {/* Right Column - Contact Form */}
-            <ContactForm isDarkMode={isDarkMode} />
+            <div className="hidden">
+              <ContactForm isDarkMode={isDarkMode} />
+            </div>
           </div>
         </div>
       </section>
