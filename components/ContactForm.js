@@ -1,19 +1,8 @@
 'use client';
 
-import { useState } from 'react';
-import { motion } from 'framer-motion';
-import { Send, Loader, CheckCircle, AlertCircle } from 'lucide-react';
-
 export default function ContactForm({ isDarkMode }) {
-  const [formData, setFormData] = useState({
-    name: '',
-    email: '',
-    message: ''
-  });
-  const [status, setStatus] = useState('idle'); // idle, sending, success, error
-  const [responseMessage, setResponseMessage] = useState('');
-
-  const handleChange = (e) => {
+  return null;
+}
     const { name, value } = e.target;
     setFormData(prev => ({
       ...prev,
