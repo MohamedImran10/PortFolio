@@ -13,7 +13,7 @@ export async function POST(request) {
     }
 
     // Forward the request to Flask backend
-    const backendUrl = process.env.BACKEND_URL || 'http://localhost:5000';
+    const backendUrl = process.env.BACKEND_URL || 'https://portfolio-2-7gr9.onrender.com';
     
     const response = await fetch(`${backendUrl}/api/contact`, {
       method: 'POST',
