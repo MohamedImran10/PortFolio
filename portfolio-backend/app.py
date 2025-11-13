@@ -70,7 +70,7 @@ You can reply directly to: {email}
 
         # Send email
         try:
-            with smtplib.SMTP_SSL("smtp.gmail.com", 465) as server:
+            with smtplib.SMTP_SSL("smtp.gmail.com", 465, timeout=10) as server:
                 server.login(sender_email, sender_password)
                 server.send_message(msg)
             
