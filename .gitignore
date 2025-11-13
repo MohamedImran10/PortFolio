@@ -31,3 +31,26 @@ yarn-error.log*
 # TypeScript
 *.tsbuildinfo
 next-env.d.ts
+
+# Python Backend
+portfolio-backend/__pycache__/
+portfolio-backend/*.py[cod]
+portfolio-backend/*$py.class
+portfolio-backend/venv/
+portfolio-backend/.venv
+portfolio-backend/env/
+portfolio-backend/ENV/
+portfolio-backend/.env
+portfolio-backend/instance/
+portfolio-backend/.webassets-cache
+portfolio-backend/*.log
+portfolio-backend/db.sqlite3
+portfolio-backend/db.sqlite3-journal
+portfolio-backend/.pytest_cache/
+portfolio-backend/.coverage
+portfolio-backend/htmlcov/
+portfolio-backend/dist/
+portfolio-backend/build/
+portfolio-backend/*.egg-info/
+portfolio-backend/.idea/
+
