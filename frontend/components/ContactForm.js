@@ -26,7 +26,7 @@ export default function ContactForm({ isDarkMode }) {
     setSubmitStatus(null);
 
     try {
-      const response = await fetch('https://portfolio-backend-3ope.onrender.com', {
+      const response = await fetch('https://portfolio-backend-3ope.onrender.com/contact', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
