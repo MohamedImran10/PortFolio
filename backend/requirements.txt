@@ -1,0 +1,8 @@
+Flask
+Flask-CORS
+python-dotenv
+requests
+google-genai
+pydantic
+enum34; python_version<"3.11"
+gunicorn

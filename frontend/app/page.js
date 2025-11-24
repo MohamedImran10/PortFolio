@@ -1159,13 +1159,13 @@ export default function Portfolio() {
             </p>
           </motion.div>
 
-          <div className="flex flex-col items-center justify-center gap-8 w-full">
-            {/* Contact Info - Centered */}
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-start">
+            {/* Contact Info */}
             <motion.div
               initial={{ opacity: 0, x: -50 }}
               whileInView={{ opacity: 1, x: 0 }}
               transition={{ duration: 0.8 }}
-              className="space-y-6 w-full max-w-lg"
+              className="space-y-6"
             >
               <div className="space-y-6">
                 <motion.a
@@ -1257,6 +1257,9 @@ export default function Portfolio() {
                 </motion.a>
               </motion.div>
             </motion.div>
+            
+            {/* Contact Form */}
+            <ContactForm isDarkMode={isDarkMode} />
           </div>
         </div>
       </section>
