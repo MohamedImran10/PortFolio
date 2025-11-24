@@ -452,13 +452,13 @@ export default function Portfolio() {
     },
     {
       id: '4',
-      title: 'RSS Feed Reader',
+      title: 'News Feed Reader',
       description: 'Django-based responsive web application for reading and managing RSS feeds with real-time updates, accessibility features, and modern UI.',
       tech: ['Django', 'Bootstrap 5', 'Vanilla JavaScript', 'SQLite'],
       color: 'orange',
       image: '/api/placeholder/400/300',
       github: 'https://github.com/MohamedImran10/News_Feed_app',
-      hosted: null // Add your hosted URL here when available
+      hosted: 'https://news-feed-app-nffy.onrender.com/'
     },
     {
       id: '5',
