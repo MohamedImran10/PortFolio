@@ -11,7 +11,7 @@ from enum import Enum
 load_dotenv()
 
 app = Flask(__name__)
-CORS(app, origins=["https://mohamedimran.vercel.app/"])  # Enable CORS for frontend requests
+CORS(app, origins=["https://mohamedimran.vercel.app"])  # Enable CORS for production frontend
 client = genai.Client(api_key=os.getenv("GEMINI_API_KEY"))
 
 # Telegram bot configuration
