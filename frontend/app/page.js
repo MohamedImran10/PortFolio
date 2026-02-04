@@ -685,28 +685,28 @@ export default function Portfolio() {
               }`}>
                 <div className="space-y-4">
                   {['Home', 'About', 'Projects', 'Skills', 'Contact'].map((item, index) => (
-                    <motion.a
+                    <motion.button
                       key={item}
-                      href={`#${item.toLowerCase()}`}
                       initial={{ opacity: 0, x: -20 }}
                       animate={{ opacity: 1, x: 0 }}
                       transition={{ delay: index * 0.1 }}
-                      className={`block text-lg font-medium transition-colors ${
+                      className={`block w-full text-left text-lg font-medium transition-colors ${
                         currentSection === index 
                           ? (isDarkMode ? 'text-cyan-400' : 'text-blue-600')
                           : (isDarkMode ? 'text-gray-300 hover:text-cyan-400' : 'text-gray-600 hover:text-blue-600')
                       }`}
-                      onClick={(e) => {
-                        e.preventDefault()
+                      onClick={() => {
                         setCurrentSection(index)
                         setIsMobileMenuOpen(false)
-                        document.getElementById(item.toLowerCase())?.scrollIntoView({
-                          behavior: 'smooth'
-                        })
+                        setTimeout(() => {
+                          document.getElementById(item.toLowerCase())?.scrollIntoView({
+                            behavior: 'smooth'
+                          })
+                        }, 100)
                       }}
                     >
                       {item}
-                    </motion.a>
+                    </motion.button>
                   ))}
                   
                   {/* Mobile Resume Buttons */}
