@@ -469,6 +469,16 @@ export default function Portfolio() {
       image: '/api/placeholder/400/300',
       github: 'https://github.com/MohamedImran10/SmartLoan_AI',
       hosted: 'https://smartloan-ai.onrender.com/'
+    },
+    {
+      id: '6',
+      title: 'Insightor: AI-Powered Research Engine',
+      description: 'An intelligent research assistant that bridges the gap between real-time web exploration and long-term memory to automate complex academic and professional workflows.',
+      tech: ['FastAPI', 'React', 'Pinecone', 'Firebase'],
+      color: 'indigo',
+      image: '/api/placeholder/400/300',
+      github: 'https://github.com/MohamedImran10/Insightor',
+      hosted: 'https://insightor-research-assistant.vercel.app'
     }
   ]
 
