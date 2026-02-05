@@ -1,8 +1,9 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
-import { Mail, User, MessageSquare, Send, Check, X } from 'lucide-react';
+import { Mail, User, MessageSquare, Send, Check, X, Loader } from 'lucide-react';
+import { sendToTelegram } from '@/app/actions/contact';
 
 export default function ContactForm({ isDarkMode }) {
   const [formData, setFormData] = useState({
@@ -11,7 +12,11 @@ export default function ContactForm({ isDarkMode }) {
     message: ''
   });
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [submitStatus, setSubmitStatus] = useState(null); // 'success', 'error', null
+  const [submitStatus, setSubmitStatus] = useState(null);
+
+  useEffect(() => {
+    // Puter.js will be loaded dynamically during form submission
+  }, []);
 
   const handleChange = (e) => {
     setFormData({
@@ -24,24 +29,97 @@ export default function ContactForm({ isDarkMode }) {
     e.preventDefault();
     setIsSubmitting(true);
     setSubmitStatus(null);
-
     try {
-      const response = await fetch('https://portfolio-backend-3ope.onrender.com/contact', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(formData),
+      // Generate AI analysis using Puter.js LLM (client-side)
+      let analysis = `Neutral & Medium Urgency: Portfolio contact form submission.`;
+      
+      try {
+        console.log('🤖 Loading Puter.js...');
+        const { default: puter } = await import('@heyputer/puter.js');
+        
+        // Ensure Puter is initialized
+        if (!puter.ai) {
+          console.warn('⚠️ Puter.ai not available, attempting initialization...');
+          // Try to initialize if needed
+          await new Promise(resolve => setTimeout(resolve, 500));
+        }
+
+        // Simple, direct prompt
+        const analysisPrompt = `Analyze this message and respond with ONE line in format: "[Sentiment] & [Urgency]: [Description]"
+
+Message: "${formData.message}"
+
+Keep it under 15 words. Examples:
+- Positive & Low Urgency: General praise for portfolio design
+- Neutral & High Urgency: Time-sensitive internship question
+- Professional & Medium Urgency: Technical interview request
+
+ONLY return the one-liner, nothing else.`;
+
+        console.log('📤 Calling Puter.ai.chat()...');
+        const response = await puter.ai.chat(analysisPrompt);
+        
+        console.log('� Puter response:', response);
+
+        // Extract text - try multiple approaches
+        let extractedText = '';
+        
+        if (typeof response === 'string') {
+          extractedText = response;
+        } else if (response?.message?.content) {
+          extractedText = response.message.content;
+        } else if (response?.text) {
+          extractedText = response.text;
+        } else if (response?.content) {
+          extractedText = response.content;
+        } else if (response?.choices?.[0]?.message?.content) {
+          extractedText = response.choices[0].message.content;
+        } else {
+          // Last resort: stringify and look for quotes or actual content
+          const str = JSON.stringify(response);
+          console.log('📋 Stringified response:', str);
+          
+          // Try to find any meaningful text
+          const match = str.match(/"(?:content|text|message)":"([^"]+)"/i);
+          if (match) {
+            extractedText = match[1];
+          }
+        }
+
+        if (extractedText && extractedText.trim()) {
+          analysis = extractedText.trim();
+          console.log('✅ AI Analysis:', analysis);
+        } else {
+          console.warn('⚠️ Could not extract text, using fallback');
+          analysis = `Neutral & Medium Urgency: Portfolio contact form submission.`;
+        }
+      } catch (aiError) {
+        console.error('❌ Puter.js error:', aiError.message);
+        console.error('Full error:', aiError);
+        analysis = `Neutral & Medium Urgency: Portfolio contact form submission.`;
+      }
+
+      console.log('📤 Sending to server with analysis:', analysis);
+      const result = await sendToTelegram({
+        name: formData.name,
+        email: formData.email,
+        message: formData.message,
+        analysis: analysis
       });
 
-      if (response.ok) {
+      console.log('📥 Server response:', result);
+
+      if (result.success) {
+        console.log('✅ Form submission successful!');
         setSubmitStatus('success');
         setFormData({ name: '', email: '', message: '' });
+        setTimeout(() => setSubmitStatus(null), 5000);
       } else {
+        console.error('❌ Form submission failed:', result.error);
         setSubmitStatus('error');
       }
     } catch (error) {
-      console.error('Error submitting form:', error);
+      console.error('❌ Form error:', error.message);
       setSubmitStatus('error');
     } finally {
       setIsSubmitting(false);
@@ -65,13 +143,10 @@ export default function ContactForm({ isDarkMode }) {
         }`}>Send Message</h3>
         
         <form onSubmit={handleSubmit} className="space-y-6">
-          {/* Name Input */}
           <div>
             <label htmlFor="name" className={`block text-sm font-medium mb-2 ${
               isDarkMode ? 'text-gray-300' : 'text-gray-700'
-            }`}>
-              Name
-            </label>
+            }`}>Name</label>
             <div className="relative">
               <User size={20} className={`absolute left-3 top-1/2 transform -translate-y-1/2 ${
                 isDarkMode ? 'text-gray-400' : 'text-gray-500'
@@ -93,13 +168,10 @@ export default function ContactForm({ isDarkMode }) {
             </div>
           </div>
 
-          {/* Email Input */}
           <div>
             <label htmlFor="email" className={`block text-sm font-medium mb-2 ${
               isDarkMode ? 'text-gray-300' : 'text-gray-700'
-            }`}>
-              Email
-            </label>
+            }`}>Email</label>
             <div className="relative">
               <Mail size={20} className={`absolute left-3 top-1/2 transform -translate-y-1/2 ${
                 isDarkMode ? 'text-gray-400' : 'text-gray-500'
@@ -121,13 +193,10 @@ export default function ContactForm({ isDarkMode }) {
             </div>
           </div>
 
-          {/* Message Input */}
           <div>
             <label htmlFor="message" className={`block text-sm font-medium mb-2 ${
               isDarkMode ? 'text-gray-300' : 'text-gray-700'
-            }`}>
-              Message
-            </label>
+            }`}>Message</label>
             <div className="relative">
               <MessageSquare size={20} className={`absolute left-3 top-3 ${
                 isDarkMode ? 'text-gray-400' : 'text-gray-500'
@@ -149,7 +218,6 @@ export default function ContactForm({ isDarkMode }) {
             </div>
           </div>
 
-          {/* Submit Button */}
           <motion.button
             type="submit"
             disabled={isSubmitting}
@@ -179,7 +247,6 @@ export default function ContactForm({ isDarkMode }) {
           </motion.button>
         </form>
 
-        {/* Status Messages */}
         {submitStatus && (
           <motion.div
             initial={{ opacity: 0, y: 10 }}
@@ -204,7 +271,7 @@ export default function ContactForm({ isDarkMode }) {
             ) : (
               <>
                 <X size={20} />
-                <span>Failed to send message. Please try again or contact me directly.</span>
+                <span>Failed to send. Please try again or contact me directly.</span>
               </>
             )}
           </motion.div>

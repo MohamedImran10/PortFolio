@@ -10,6 +10,7 @@
   },
   "dependencies": {
     "@google/generative-ai": "^0.24.1",
+    "@heyputer/puter.js": "latest",
     "axios": "^1.13.2",
     "framer-motion": "^10.16.4",
     "google-auth-library": "^10.3.0",
