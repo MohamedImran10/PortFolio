@@ -1,9 +1,8 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { motion } from 'framer-motion';
 import { Mail, User, MessageSquare, Send, Check, X, Loader } from 'lucide-react';
-import { sendToTelegram } from '@/app/actions/contact';
 
 export default function ContactForm({ isDarkMode }) {
   const [formData, setFormData] = useState({
@@ -13,10 +12,6 @@ export default function ContactForm({ isDarkMode }) {
   });
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitStatus, setSubmitStatus] = useState(null);
-
-  useEffect(() => {
-    // Puter.js will be loaded dynamically during form submission
-  }, []);
 
   const handleChange = (e) => {
     setFormData({
@@ -36,50 +31,34 @@ export default function ContactForm({ isDarkMode }) {
       console.log('   Email:', formData.email);
       console.log('   Message length:', formData.message.length);
 
-      // Simple default analysis
-      let analysis = `Message from ${formData.name}`;
+      // Call Flask backend directly
+      const flaskUrl = process.env.NEXT_PUBLIC_FLASK_API_URL || 'http://localhost:5000';
+      const endpoint = `${flaskUrl}/contact`;
       
-      // Try AI analysis but don't block
-      try {
-        console.log('🤖 Attempting AI analysis...');
-        const { default: puter } = await import('@heyputer/puter.js');
-        
-        if (puter?.ai?.chat) {
-          const response = await puter.ai.chat(`Analyze: "${formData.message.substring(0, 100)}"`);
+      console.log('📡 Calling Flask backend:', endpoint);
 
-          // Extract response
-          let text = '';
-          if (typeof response === 'string') text = response;
-          else if (response?.message?.content) text = response.message.content;
-          else if (response?.text) text = response.text;
-          else if (response?.content) text = response.content;
-
-          if (text?.trim()) {
-            analysis = text.trim();
-            console.log('✅ AI Analysis:', analysis);
-          }
-        }
-      } catch (aiError) {
-        console.warn('⚠️ AI unavailable:', aiError.message);
-      }
-
-      console.log('📤 Sending to server with analysis:', analysis);
-      const result = await sendToTelegram({
-        name: formData.name,
-        email: formData.email,
-        message: formData.message,
-        analysis: analysis
+      const response = await fetch(endpoint, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          name: formData.name,
+          email: formData.email,
+          message: formData.message
+        })
       });
 
-      console.log('📥 Server response:', result);
+      const result = await response.json();
+      console.log('📥 Backend response:', result);
 
-      if (result.success) {
+      if (response.ok && result.status === 'success') {
         console.log('✅ Form submission successful!');
         setSubmitStatus('success');
         setFormData({ name: '', email: '', message: '' });
         setTimeout(() => setSubmitStatus(null), 5000);
       } else {
-        console.error('❌ Form submission failed:', result.error);
+        console.error('❌ Form submission failed:', result.message || 'Unknown error');
         setSubmitStatus('error');
       }
     } catch (error) {
