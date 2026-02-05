@@ -29,74 +29,38 @@ export default function ContactForm({ isDarkMode }) {
     e.preventDefault();
     setIsSubmitting(true);
     setSubmitStatus(null);
+    
     try {
-      // Generate AI analysis using Puter.js LLM (client-side)
-      let analysis = `Neutral & Medium Urgency: Portfolio contact form submission.`;
+      console.log('📤 Starting form submission...');
+      console.log('   Name:', formData.name);
+      console.log('   Email:', formData.email);
+      console.log('   Message length:', formData.message.length);
+
+      // Simple default analysis
+      let analysis = `Message from ${formData.name}`;
       
+      // Try AI analysis but don't block
       try {
-        console.log('🤖 Loading Puter.js...');
+        console.log('🤖 Attempting AI analysis...');
         const { default: puter } = await import('@heyputer/puter.js');
         
-        // Ensure Puter is initialized
-        if (!puter.ai) {
-          console.warn('⚠️ Puter.ai not available, attempting initialization...');
-          // Try to initialize if needed
-          await new Promise(resolve => setTimeout(resolve, 500));
-        }
+        if (puter?.ai?.chat) {
+          const response = await puter.ai.chat(`Analyze: "${formData.message.substring(0, 100)}"`);
 
-        // Simple, direct prompt
-        const analysisPrompt = `Analyze this message and respond with ONE line in format: "[Sentiment] & [Urgency]: [Description]"
+          // Extract response
+          let text = '';
+          if (typeof response === 'string') text = response;
+          else if (response?.message?.content) text = response.message.content;
+          else if (response?.text) text = response.text;
+          else if (response?.content) text = response.content;
 
-Message: "${formData.message}"
-
-Keep it under 15 words. Examples:
-- Positive & Low Urgency: General praise for portfolio design
-- Neutral & High Urgency: Time-sensitive internship question
-- Professional & Medium Urgency: Technical interview request
-
-ONLY return the one-liner, nothing else.`;
-
-        console.log('📤 Calling Puter.ai.chat()...');
-        const response = await puter.ai.chat(analysisPrompt);
-        
-        console.log('� Puter response:', response);
-
-        // Extract text - try multiple approaches
-        let extractedText = '';
-        
-        if (typeof response === 'string') {
-          extractedText = response;
-        } else if (response?.message?.content) {
-          extractedText = response.message.content;
-        } else if (response?.text) {
-          extractedText = response.text;
-        } else if (response?.content) {
-          extractedText = response.content;
-        } else if (response?.choices?.[0]?.message?.content) {
-          extractedText = response.choices[0].message.content;
-        } else {
-          // Last resort: stringify and look for quotes or actual content
-          const str = JSON.stringify(response);
-          console.log('📋 Stringified response:', str);
-          
-          // Try to find any meaningful text
-          const match = str.match(/"(?:content|text|message)":"([^"]+)"/i);
-          if (match) {
-            extractedText = match[1];
+          if (text?.trim()) {
+            analysis = text.trim();
+            console.log('✅ AI Analysis:', analysis);
           }
         }
-
-        if (extractedText && extractedText.trim()) {
-          analysis = extractedText.trim();
-          console.log('✅ AI Analysis:', analysis);
-        } else {
-          console.warn('⚠️ Could not extract text, using fallback');
-          analysis = `Neutral & Medium Urgency: Portfolio contact form submission.`;
-        }
       } catch (aiError) {
-        console.error('❌ Puter.js error:', aiError.message);
-        console.error('Full error:', aiError);
-        analysis = `Neutral & Medium Urgency: Portfolio contact form submission.`;
+        console.warn('⚠️ AI unavailable:', aiError.message);
       }
 
       console.log('📤 Sending to server with analysis:', analysis);
