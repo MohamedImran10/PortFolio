@@ -85,9 +85,11 @@ export async function sendToTelegram(formData) {
       console.error('   Status code:', data.error_code);
       console.error('   Description:', data.description);
       console.error('   Full error:', JSON.stringify(data));
+      
+      // IMPORTANT: Return false even if response.ok is true but data.ok is false
       return {
         success: false,
-        error: data.description || 'Failed to send message to Telegram'
+        error: `Telegram error: ${data.description || 'Unknown error'}`
       };
     }
   } catch (error) {
