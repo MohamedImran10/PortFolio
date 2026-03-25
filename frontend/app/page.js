@@ -486,11 +486,13 @@ export default function Portfolio() {
     // Frontend Technologies
     'HTML5', 'CSS3', 'JavaScript', 'Bootstrap',
     // Backend Technologies
-    'Python', 'Django', 'Flask', 'RESTful APIs',
+    'Python', 'Django', 'Flask', 'FastAPI', 'RESTful APIs',
     // Programming Languages
      'Java','J2EE','JSP', 'C',
     // Databases
     'MySQL', 'SQLite', 'SQL', 'MongoDB',
+    // AI & Agentic Systems
+    'Agentic AI', 'AI Agents', 'Multi-Agent systems',
     // Developer Tools
     'Git', 'GitHub', 'Eclipse', 'Tomcat', 'VS Code', 'GitHub Copilot'
   ]
@@ -983,7 +985,7 @@ export default function Portfolio() {
                 >
                   <div className={`text-3xl font-bold mb-2 ${
                     isDarkMode ? 'text-green-400' : 'text-green-600'
-                  }`}>22</div>
+                  }`}>26</div>
                   <div className={`text-sm ${
                     isDarkMode ? 'text-gray-300' : 'text-gray-700'
                   }`}>Technologies Mastered</div>
