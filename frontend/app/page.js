@@ -908,17 +908,12 @@ export default function Portfolio() {
                 <p className={`leading-relaxed mb-4 ${
                   isDarkMode ? 'text-gray-300' : 'text-gray-700'
                 }`}>
-                  I'm Mohamed Imran, a passionate Full Stack Web Developer with a deep fascination for 
-                  artificial intelligence and machine learning. My journey in technology started with 
-                  curiosity and has evolved into a commitment to creating innovative solutions that 
-                  bridge the gap between complex technology and user-friendly experiences.
+                  I'm Mohamed Imran, a Software Developer and final year student specializing in Agentic AI and multi-agent systems. My journey in technology focuses on creating innovative autonomous solutions that bridge the gap between complex AI agents and user-friendly web experiences.
                 </p>
                 <p className={`leading-relaxed ${
                   isDarkMode ? 'text-gray-300' : 'text-gray-700'
                 }`}>
-                  As a lifelong learner, I constantly explore emerging technologies, from modern web 
-                  frameworks to cutting-edge AI models, always seeking to expand my knowledge and 
-                  apply it to real-world challenges.
+                  As a lifelong learner, I've gained three years of hands-on experience with modern frameworks and cutting-edge models, always seeking to expand my knowledge and apply it to real-world challenges.
                 </p>
               </div>
             </motion.div>
@@ -946,10 +941,10 @@ export default function Portfolio() {
                 >
                   <div className={`text-3xl font-bold mb-2 ${
                     isDarkMode ? 'text-cyan-400' : 'text-blue-600'
-                  }`}>2+</div>
+                  }`}>3</div>
                   <div className={`text-sm ${
                     isDarkMode ? 'text-gray-300' : 'text-gray-700'
-                  }`}>Years of Experience</div>
+                  }`}>Hands-on Experience</div>
                 </motion.div>
                 
                 <motion.div
@@ -967,7 +962,7 @@ export default function Portfolio() {
                 >
                   <div className={`text-3xl font-bold mb-2 ${
                     isDarkMode ? 'text-purple-400' : 'text-purple-600'
-                  }`}>4</div>
+                  }`}>6</div>
                   <div className={`text-sm ${
                     isDarkMode ? 'text-gray-300' : 'text-gray-700'
                   }`}>Projects Completed</div>
